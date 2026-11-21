@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="연말정산 13월의 월급 역산기">
-  <rect width="64" height="64" rx="6" fill="#F3EADD"/>
-  <rect x="5.5" y="5.5" width="53" height="53" rx="2" fill="none" stroke="#A8431F" stroke-width="1.4"/>
-  <path d="M17 21h30M17 31h16M17 41h30" stroke="#33281E" stroke-width="2" stroke-linecap="round" opacity=".9"/>
-  <circle cx="44" cy="31" r="7" fill="#A8431F"/>
-  <text x="44" y="35" font-family="Georgia, serif" font-size="10" font-weight="700" fill="#FFF8F0" text-anchor="middle">13</text>
+  <rect width="64" height="64" rx="16" fill="#0C0D0F"/>
+  <text x="32" y="42" font-family="'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif" font-size="27" font-weight="800" letter-spacing="-1" fill="#FFFFFF" text-anchor="middle">13</text>
+  <circle cx="49" cy="17" r="5" fill="#2F5BFF"/>
 </svg>
