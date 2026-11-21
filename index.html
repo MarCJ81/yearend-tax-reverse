@@ -1,0 +1,1659 @@
+<!doctype html>
+<html lang="ko" data-design="designref.v2/crisp-bento">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>연말정산 13월의 월급 역산기 — 12/31까지 뭘 해야 하나, 30초</title>
+<meta name="description" content="총급여와 카드·연금·월세만 넣으면 12월 31일 전에 무엇을 얼마나 해야 세금이 얼마 줄어드는지 역산합니다. 카드 25% 문턱, 공제 한도 잔여, 연금저축·IRP 900만원 한도, 월세 17%까지. 로그인 없이 브라우저에서만 계산.">
+<meta name="theme-color" content="#FAFAFA">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://marcj81.github.io/yearend-tax-reverse/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/plexkr-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plexkr-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plexkr-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="연말정산 13월의 월급 역산기">
+<meta property="og:title" content="연말정산 13월의 월급 역산기 — 12/31까지 뭘 해야 하나">
+<meta property="og:description" content="미리보기는 12/18에 닫힙니다. 카드 얼마가 아니라, 지금 무엇을 해야 세금이 얼마 줄어드는지 30초에 역산합니다.">
+<meta property="og:url" content="https://marcj81.github.io/yearend-tax-reverse/">
+<meta property="og:image" content="https://marcj81.github.io/yearend-tax-reverse/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="12/31 전에 뭐 해야 하나, 30초 역산 — 연말정산 13월의 월급 역산기">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://marcj81.github.io/yearend-tax-reverse/og.png">
+<meta name="twitter:title" content="연말정산 13월의 월급 역산기">
+<meta name="twitter:description" content="카드 25% 문턱·공제 한도·연금 900만원·월세 17%를 12/31 기준으로 역산합니다.">
+<script>if(/[?&]embed=1(?:&|$)/.test(location.search))document.documentElement.classList.add('embed');</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"연말정산 13월의 월급 역산기","applicationCategory":"FinanceApplication","operatingSystem":"Any","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"description":"총급여·카드 사용액·연금계좌 납입액·월세를 넣으면 12월 31일 전 남은 절세 행동과 금액을 역산하는 무료 웹 계산기.","featureList":["신용카드 25% 문턱 판정","카드 소득공제 한도 잔여","연금저축·IRP 900만원 역산","월세 세액공제","결과 카드 PNG","iframe 퍼가기"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"홈택스 연말정산 미리보기와 숫자가 다른데요?","acceptedAnswer":{"@type":"Answer","text":"이 도구는 카드·연금·월세·인적공제만으로 줄어드는 세금을 역산합니다. 미리보기는 전년도 지급명세서와 기납부세액, 의료비·교육비·기부금까지 반영한 추정치라 숫자가 다를 수 있습니다. 확정 금액은 1월 연말정산 간소화 자료로 확인해야 합니다."}},
+{"@type":"Question","name":"카드 100만원을 더 쓰면 정말 이득인가요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 신용카드 15%·체크카드 30% 소득공제는 쓴 금액의 일부를 과세표준에서 빼는 것이라, 100만원을 더 쓰면 세금은 2만~5만원 줄지만 통장에서 100만원이 나갑니다. 공제 한도가 이미 찼다면 0원입니다."}},
+{"@type":"Question","name":"연금저축 900만원을 넣으면 148만 5,000원을 그대로 받나요?","acceptedAnswer":{"@type":"Answer","text":"총급여 5,500만원 이하라면 납입액의 16.5%(지방소득세 포함), 초과라면 13.2%가 세액공제 됩니다. 다만 결정세액 범위 안에서만 돌려받으므로, 이미 낼 세금이 적다면 실제 감소액은 더 작습니다."}},
+{"@type":"Question","name":"월세 1,000만원이면 170만원을 돌려받나요?","acceptedAnswer":{"@type":"Answer","text":"월세액의 17%(총급여 5,500만원 이하) 또는 15%(8,000만원 이하)가 소득세에서 빠지고, 지방소득세를 더하면 각각 187만원·165만원입니다. 무주택 세대주, 계약서 주소와 주민등록 주소 일치, 85㎡ 이하 또는 기준시가 4억원 이하 요건이 필요합니다."}},
+{"@type":"Question","name":"입력한 값이 저장되거나 전송되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 계산은 브라우저 안에서만 이뤄지고, 입력값을 서버로 보내거나 브라우저 저장소에 남기지 않습니다. 새로고침하면 모두 사라집니다."}}
+]}
+</script>
+</head>
+<body>
+<noscript><div style="max-width:720px;margin:40px auto;padding:24px;border:1px solid #E7E8EA;background:#FFFFFF;border-radius:16px;font-family:sans-serif;line-height:1.7;color:#0C0D0F">이 계산기는 브라우저에서 자바스크립트로 동작합니다. 자바스크립트를 켜면 총급여·카드·연금·월세를 넣어 12월 31일 전 남은 절세 금액을 바로 계산할 수 있습니다.</div></noscript>
+<a class="skip" href="#main">본문으로 바로가기</a>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#main" aria-label="연말정산 13월의 월급 역산기, 맨 위로">
+      <span class="brand-mark" aria-hidden="true">13</span>
+      <span class="brand-text">
+        <strong>13월의 월급 역산기</strong>
+        <small>Year-end tax reverse</small>
+      </span>
+    </a>
+    <nav class="nav" aria-label="섹션">
+      <a href="#input">입력</a>
+      <a href="#card-block">카드</a>
+      <a href="#pension-block">연금</a>
+      <a href="#rent-block">월세</a>
+      <a href="#share-block">공유</a>
+    </nav>
+    <span class="spacer"></span>
+    <div class="top-badges">
+      <span class="live"><i aria-hidden="true"></i>서버 전송 0건</span>
+      <span class="pill hide-s"><b>2026</b> 귀속</span>
+      <span class="pill hide-s">로그인 없음</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap embed-head" id="embed-head">
+  <div class="eh-t">13월의 월급 역산기<small>2026년 귀속 · 12/31 마감</small></div>
+  <span class="eh-b">무료 · 로그인 없음</span>
+</div>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><b>2026</b> 귀속 · 12월 31일 마감</span>
+      <h1><span id="h1-lead">13월의 월급은,<br>남은 </span><em id="h1-dday">40일</em><span id="h1-tail">에 결정됩니다</span></h1>
+      <p class="lead">카드를 얼마 더 써야 하나가 아닙니다. <b>지금 무엇을 해야 세금이 얼마 줄어드는지</b> — 총급여와 카드·연금·월세만 넣으면 12월&nbsp;31일 전 행동을 역산합니다. 입력값은 서버로 가지 않습니다.</p>
+      <div class="hero-cta">
+        <a class="btn btn-accent" href="#input">30초 역산 시작 <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#actions">12/31 전 할 일 3개</a>
+      </div>
+      <div class="trust">
+        <span>서버 전송 0건</span><span>로그인·가입 없음</span><span>입력값 저장 안 함</span>
+      </div>
+    </div>
+
+    <aside class="deadline" aria-label="마감 일정">
+      <div class="dl-head">
+        <span class="micro">남은 기한</span>
+        <span class="micro-sub">2026년 귀속</span>
+      </div>
+      <div class="dl-grid">
+        <div class="dl-tile">
+          <p class="dl-k">홈택스 미리보기</p>
+          <p class="dl-date">12.18</p>
+          <p class="dday" id="dday-preview">D-27</p>
+          <p class="dl-note">계획을 세우는 화면</p>
+        </div>
+        <div class="dl-tile dl-tile-dark">
+          <p class="dl-k">카드 · 연금 · 월세</p>
+          <p class="dl-date">12.31</p>
+          <p class="dday due" id="dday-pay">D-40</p>
+          <p class="dl-note">2026년 몫 확정</p>
+        </div>
+      </div>
+      <p class="dl-foot">12/18이 지나면 홈택스의 계획 화면이 닫힙니다. 12/31은 카드 사용·연금 납입·월세 지급이 올해 몫으로 끝나는 날입니다.</p>
+    </aside>
+  </div>
+</section>
+
+<main id="main" class="wrap">
+  <div class="layout">
+
+    <!-- ═══ 입력 ═══ -->
+    <section class="panel" id="input" aria-labelledby="input-title">
+      <div class="panel-head">
+        <div>
+          <h2 id="input-title">30초 입력</h2>
+          <p>모르는 항목은 비워두세요. 넣는 만큼 정확해집니다.</p>
+        </div>
+        <span class="live-chip">지금 절세 <b id="live-chip">—</b></span>
+      </div>
+      <form class="panel-body" id="calc-form" novalidate>
+        <div class="field">
+          <label for="in-gross"><span><span class="fnum">01</span>총급여</span><span class="unit">만원</span></label>
+          <div class="in-wrap">
+            <input class="money" type="text" id="in-gross" inputmode="numeric" autocomplete="off" placeholder="5,000" maxlength="9" aria-describedby="hint-gross">
+            <span class="suf">만원</span>
+          </div>
+          <p class="hint" id="hint-gross">연봉이 아니라 <b>비과세(식대·차량 등)를 뺀</b> 금액입니다. 급여명세서의 과세 대상 급여 합계를 보세요.</p>
+        </div>
+
+        <div class="field">
+          <span class="label" id="children-label"><span><span class="fnum">02</span>기본공제 대상 자녀</span><span class="unit">카드 한도</span></span>
+          <div class="seg" id="seg-children" role="group" aria-labelledby="children-label">
+            <button type="button" data-v="0" aria-pressed="true">없음</button>
+            <button type="button" data-v="1" aria-pressed="false">1명</button>
+            <button type="button" data-v="2" aria-pressed="false">2명 이상</button>
+          </div>
+          <p class="hint">2026년 사용분부터 자녀가 있으면 카드 기본한도가 50만~100만원 늘어납니다.</p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="in-credit"><span><span class="fnum">03</span>신용카드</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-credit" inputmode="numeric" autocomplete="off" placeholder="1,800">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="in-debit"><span><span class="fnum">04</span>체크·현금영수증</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-debit" inputmode="numeric" autocomplete="off" placeholder="600">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+        </div>
+        <p class="hint hint-block">전통시장·대중교통에서 쓴 금액은 빼고 넣습니다. 겹치면 공제가 두 번 계산됩니다.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="in-transit"><span><span class="fnum">05</span>대중교통</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-transit" inputmode="numeric" autocomplete="off" placeholder="80">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="in-market"><span><span class="fnum">06</span>전통시장</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-market" inputmode="numeric" autocomplete="off" placeholder="120">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+        </div>
+        <p class="hint hint-block">버스·지하철·택시, 온누리상품권 포함. 결제수단과 상관없이 <b>40%</b> 공제입니다.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="in-pension"><span><span class="fnum">07</span>연금저축</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-pension" inputmode="numeric" autocomplete="off" placeholder="300">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="in-irp"><span><span class="fnum">08</span>IRP</span><span class="unit">만원</span></label>
+            <div class="in-wrap">
+              <input class="money" type="text" id="in-irp" inputmode="numeric" autocomplete="off" placeholder="100">
+              <span class="suf">만원</span>
+            </div>
+          </div>
+        </div>
+        <p class="hint hint-block">연금저축은 <b>연 600만원</b>, IRP와 합쳐 <b>900만원</b>까지 세액공제 됩니다. 연금저축만 900만원 넣으면 300만원은 공제되지 않습니다.</p>
+
+        <div class="field">
+          <label for="in-rent"><span><span class="fnum">09</span>월세</span><span class="unit">월 · 만원</span></label>
+          <div class="in-wrap">
+            <input class="money" type="text" id="in-rent" inputmode="numeric" autocomplete="off" placeholder="0">
+            <span class="suf">만원</span>
+          </div>
+          <p class="hint">무주택 세대주이고, 월세를 실제로 냈다면 넣으세요. 연 1,000만원까지만 공제 대상입니다.</p>
+        </div>
+
+        <details class="adv">
+          <summary>고급 설정 — 부양가족·보험료 가정</summary>
+          <div class="adv-body">
+            <div class="field">
+              <label for="in-extra"><span>추가 부양가족 수</span><span class="unit">명</span></label>
+              <div class="in-wrap">
+                <input class="money" type="text" id="in-extra" inputmode="numeric" autocomplete="off" placeholder="0" maxlength="2">
+                <span class="suf">명</span>
+              </div>
+              <p class="hint">본인과 자녀를 제외한 배우자·부모 등 기본공제 대상자 수입니다. 1명당 150만원이 소득에서 빠집니다.</p>
+            </div>
+            <p class="hint">국민연금은 총급여의 4.75%, 건강·고용보험은 4.9673%로 추정합니다(2026년 요율). 실제 고지액과 조금 다를 수 있습니다.</p>
+          </div>
+        </details>
+
+        <div class="form-foot">
+          <span class="privacy">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 3 3.6v4.2c0 3.1 2.1 5.6 5 6.7 2.9-1.1 5-3.6 5-6.7V3.6L8 1.5Z" stroke="currentColor" stroke-width="1.3"/><path d="m5.9 7.9 1.5 1.5 2.9-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            입력값 저장·전송 없음
+          </span>
+          <span style="display:flex;gap:14px">
+            <button class="reset" type="button" id="btn-sample">예시로 채워보기</button>
+            <button class="reset" type="button" id="btn-reset">지우기</button>
+          </span>
+        </div>
+      </form>
+    </section>
+
+    <!-- ═══ 역산 요약 (벤토) ═══ -->
+    <aside class="summary" id="summary" aria-label="역산 요약">
+      <div class="sum-bento">
+        <div class="tile tile-hero">
+          <div class="tile-top">
+            <span class="micro">역산 요약 · 2026년 귀속</span>
+            <span class="live live-sm"><i aria-hidden="true"></i>실시간</span>
+          </div>
+          <p class="hero-label" id="hero-label">총급여를 넣으면 바로 계산됩니다</p>
+          <p class="hero-amount" id="hero-amount" aria-live="polite"><span id="hero-num">—</span></p>
+          <p class="hero-note" id="hero-note">지방소득세 포함 · 결정세액 범위 안에서만</p>
+        </div>
+
+        <div class="tile tile-metric tile-wide">
+          <span class="m-k"><b>연금계좌 남은 한도</b><span id="sum-pension-k">900만원까지</span></span>
+          <span class="v" id="sum-pension">—</span>
+        </div>
+
+        <div class="tile tile-metric">
+          <span class="m-k"><b>월세 세액공제</b><span id="sum-rent-k">무주택 세대주</span></span>
+          <span class="v" id="sum-rent">—</span>
+        </div>
+
+        <div class="tile tile-metric">
+          <span class="m-k"><b>카드</b><span id="sum-card-k">25% 문턱·한도</span></span>
+          <span class="v" id="sum-card">—</span>
+        </div>
+
+        <div class="tile tile-dday">
+          <span>미리보기 <b id="mini-dday">D-27</b></span>
+          <span>납입·결제 <b id="mini-pay">D-40</b></span>
+        </div>
+
+        <div class="go">
+          <a class="btn btn-accent" href="#actions">할 일 3개 보기</a>
+          <a class="btn btn-ghost" href="#share-block">카드 저장</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ═══ 액션 ═══ -->
+  <section class="block" id="actions" aria-labelledby="actions-title">
+    <div class="block-head">
+      <span class="bno">02</span>
+      <h2 id="actions-title">12/31 전, 이 순서로 하세요</h2>
+      <p class="bsub">연금과 월세는 추가 지출 없이 줄어드는 돈, 카드는 더 써야 줄어드는 돈입니다. 그래서 이 순서입니다.</p>
+    </div>
+    <ol class="actions" id="action-list"></ol>
+  </section>
+
+  <!-- ═══ 카드 ═══ -->
+  <section class="block" id="card-block" aria-labelledby="card-title">
+    <div class="block-head">
+      <span class="bno">03</span>
+      <h2 id="card-title">카드 25% 문턱과 공제 한도</h2>
+      <p class="bsub">총급여의 25%를 넘긴 사용액에만 공제가 붙습니다. 문턱을 넘기 전에는 어떤 카드로 써도 공제가 0원입니다.</p>
+    </div>
+    <div class="card">
+      <div class="stats">
+        <div class="stat">
+          <p class="lab">25% 문턱</p>
+          <p class="val" id="card-threshold">—</p>
+          <p class="sub" id="card-threshold-sub">총급여 × 25%</p>
+        </div>
+        <div class="stat">
+          <p class="lab">올해 사용액 합계</p>
+          <p class="val" id="card-total">—</p>
+          <p class="sub" id="card-total-sub">신용 + 체크 + 대중교통 + 전통시장</p>
+        </div>
+        <div class="stat accent">
+          <p class="lab">카드 소득공제</p>
+          <p class="val" id="card-deduction">—</p>
+          <p class="sub" id="card-deduction-sub">한도 적용 후</p>
+        </div>
+      </div>
+
+      <div class="gauge-block">
+        <div class="gauge-top"><span class="gname">기본한도</span><span class="gval" id="gauge-base-val">—</span></div>
+        <div class="gauge"><span class="fill" id="gauge-base"></span></div>
+        <div class="gauge-foot"><span id="gauge-base-left">—</span><span id="gauge-base-limit">—</span></div>
+      </div>
+      <div class="gauge-block">
+        <div class="gauge-top"><span class="gname">추가한도 <span>전통시장·대중교통</span></span><span class="gval" id="gauge-add-val">—</span></div>
+        <div class="gauge"><span class="fill ok" id="gauge-add"></span></div>
+        <div class="gauge-foot"><span id="gauge-add-left">—</span><span id="gauge-add-limit">—</span></div>
+      </div>
+
+      <div class="callout" id="threshold-callout" style="display:none"></div>
+
+      <div class="tile-plain">
+        <p class="micro" style="margin-bottom:10px">지금 100만원을 더 쓴다면</p>
+        <div class="compare">
+          <div class="cmp" id="cmp-credit-wrap">
+            <span class="pick" id="pick-credit" hidden>유리</span>
+            <p class="cmp-k">신용카드 15%</p>
+            <p class="cmp-v" id="cmp-credit">—</p>
+            <p class="cmp-x">세금이 이만큼 줄어듭니다 (지방세 포함)</p>
+          </div>
+          <div class="cmp" id="cmp-debit-wrap">
+            <span class="pick" id="pick-debit" hidden>유리</span>
+            <p class="cmp-k">체크카드·현금영수증 30%</p>
+            <p class="cmp-v" id="cmp-debit">—</p>
+            <p class="cmp-x">세금이 이만큼 줄어듭니다 (지방세 포함)</p>
+          </div>
+        </div>
+        <div class="callout danger" id="spend-callout" style="margin-top:12px">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.6v4.2M8 11.2v.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="spend-callout-text">100만원을 더 쓰면 세금은 조금 줄지만, 통장에서는 100만원이 나갑니다.</span>
+        </div>
+      </div>
+
+      <details class="process">
+        <summary>카드 공제 계산 과정</summary>
+        <div class="pbody">
+          <table class="tbl">
+            <thead><tr><th>구분</th><th>사용액</th><th>공제액</th></tr></thead>
+            <tbody id="card-table"></tbody>
+          </table>
+          <p class="hint" style="margin-top:10px">문턱(최저사용금액)은 공제율이 낮은 신용카드분에서 먼저 차감합니다. 추가한도는 전통시장·대중교통 공제액 범위에서만 인정됩니다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ═══ 연금 ═══ -->
+  <section class="block" id="pension-block" aria-labelledby="pension-title">
+    <div class="block-head">
+      <span class="bno">04</span>
+      <h2 id="pension-title">연금저축·IRP 역산</h2>
+      <p class="bsub">900만원 한도까지 남은 금액과, 지금 넣었을 때 늘어나는 세액공제. 12월 31일 입금분까지 올해 몫입니다.</p>
+    </div>
+    <div class="card">
+      <div class="stats">
+        <div class="stat">
+          <p class="lab">공제 대상 납입액</p>
+          <p class="val" id="pen-used">—</p>
+          <p class="sub" id="pen-used-sub">연금저축 600 + IRP 합산 900</p>
+        </div>
+        <div class="stat">
+          <p class="lab">공제율</p>
+          <p class="val" id="pen-rate">—</p>
+          <p class="sub" id="pen-rate-sub">총급여 5,500만원 기준</p>
+        </div>
+        <div class="stat accent">
+          <p class="lab">남은 한도 채우면</p>
+          <p class="val" id="pen-gain">—</p>
+          <p class="sub" id="pen-gain-sub">세금 감소 (지방세 포함)</p>
+        </div>
+      </div>
+
+      <div class="gauge-block">
+        <div class="gauge-top"><span class="gname">900만원 한도</span><span class="gval" id="gauge-pen-val">—</span></div>
+        <div class="gauge"><span class="fill" id="gauge-pen"></span></div>
+        <div class="gauge-foot"><span id="gauge-pen-left">—</span><span id="gauge-pen-note">연금저축 600만원 + IRP 300만원</span></div>
+      </div>
+
+      <div class="compare">
+        <div class="cmp">
+          <p class="cmp-k">연금저축으로 인정된 금액</p>
+          <p class="cmp-v" id="pen-savings">—</p>
+          <p class="cmp-x" id="pen-savings-sub">연 600만원</p>
+        </div>
+        <div class="cmp">
+          <p class="cmp-k">IRP에 더 넣을 수 있는 금액</p>
+          <p class="cmp-v" id="pen-irp">—</p>
+          <p class="cmp-x" id="pen-irp-sub">합산 900만원까지</p>
+        </div>
+      </div>
+
+      <div class="callout" id="pen-callout" style="display:none"></div>
+      <div class="callout warn" id="pen-warn">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2 14.4 13H1.6L8 2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6.2v3M8 11.1v.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>55세 전에 해지하면 공제받은 금액과 운용수익에 <b>기타소득세 16.5%</b>가 붙습니다. 생활비로 쓸 돈은 넣지 마세요.</span>
+      </div>
+      <p class="hint" style="padding:0 4px">12월 31일 밤 이체는 늦을 수 있습니다. 금융사 영업 마감 시간 안에 입금이 끝나야 올해 납입으로 인정됩니다.</p>
+    </div>
+  </section>
+
+  <!-- ═══ 월세 ═══ -->
+  <section class="block" id="rent-block" aria-labelledby="rent-title">
+    <div class="block-head">
+      <span class="bno">05</span>
+      <h2 id="rent-title">월세 세액공제</h2>
+      <p class="bsub">이미 낸 돈이라 새로 쓸 필요가 없습니다. 12월 31일 기준 무주택이면 서류만 챙기면 됩니다.</p>
+    </div>
+    <div class="card">
+      <div class="stats">
+        <div class="stat">
+          <p class="lab">공제율</p>
+          <p class="val" id="rent-rate">—</p>
+          <p class="sub" id="rent-rate-sub">총급여 5,500 / 8,000만원 기준</p>
+        </div>
+        <div class="stat">
+          <p class="lab">공제 대상 월세</p>
+          <p class="val" id="rent-base">—</p>
+          <p class="sub">연 1,000만원 한도</p>
+        </div>
+        <div class="stat accent">
+          <p class="lab">돌려받는 세금</p>
+          <p class="val" id="rent-credit">—</p>
+          <p class="sub">지방소득세 포함</p>
+        </div>
+      </div>
+      <div class="callout" id="rent-callout" style="display:none"></div>
+      <div class="tile-plain">
+        <ul class="share-points" style="margin-top:0">
+          <li><b>무주택 세대주</b> — 12월 31일 기준. 세대원도 세대주가 주택 공제를 받지 않으면 가능합니다.</li>
+          <li><b>계약서 주소 = 주민등록 주소</b> — 전입신고가 안 되어 있으면 공제되지 않습니다.</li>
+          <li><b>85㎡ 이하 또는 기준시가 4억원 이하</b> — 주거용 오피스텔·고시원 포함.</li>
+          <li><b>제출 서류</b> — 주민등록등본, 임대차계약서 사본, 계좌이체 내역.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 계산 과정 ═══ -->
+  <section class="block" id="process-block" aria-labelledby="process-title">
+    <div class="block-head">
+      <span class="bno">06</span>
+      <h2 id="process-title">숫자는 이렇게 나옵니다</h2>
+      <p class="bsub">가정을 숨기지 않습니다. 아래 목록과 다르게 적용되는 항목이 있으면 결과도 달라집니다.</p>
+    </div>
+    <div class="tile-plain">
+      <table class="tbl tbl-process">
+        <thead><tr><th>계산 단계</th><th>금액</th><th>근거·가정</th></tr></thead>
+        <tbody id="process-table"></tbody>
+      </table>
+      <div class="callout" id="cap-callout" style="display:none"></div>
+      <p class="micro" style="margin-top:22px;margin-bottom:8px">적용한 가정</p>
+      <ul class="assumptions">
+        <li><b>총급여</b>는 비과세(식대·차량 등)를 뺀 과세 대상 급여로 봅니다.</li>
+        <li><b>인적공제</b>는 본인·자녀·추가 부양가족을 모두 기본공제 대상(1인 150만원)으로 봅니다. 경로·장애인 추가공제는 넣지 않았습니다.</li>
+        <li><b>국민연금</b>은 총급여 × 4.75%, <b>건강·고용보험</b>은 총급여 × 4.9673%로 추정합니다(2026년 요율).</li>
+        <li><b>의료비·교육비·기부금·보장성보험료</b> 세액공제는 입력받지 않아 0원입니다. 표준세액공제 13만원과 건강·고용보험 소득공제 중 유리한 쪽을 자동 적용합니다.</li>
+        <li><b>자녀세액공제</b>는 자녀가 9세 이상 기본공제 대상이라고 가정합니다(2026년 귀속 기준).</li>
+        <li><b>연금계좌</b>는 연금저축 600만원·합산 900만원 한도만 반영합니다. ISA 전환 추가한도 300만원은 제외했습니다.</li>
+        <li><b>월세</b>는 연 1,000만원 한도, 12개월 거주로 계산합니다. 중도 입주는 연간 합계로 바꿔 넣으세요.</li>
+        <li><b>카드</b>는 국내 사용분이며, 도서·공연·체육 30% 항목은 별도 입력 없이 신용/체크 공제율로 계산했습니다.</li>
+        <li><b>기납부세액</b>은 받지 않습니다. 그래서 ‘환급액’이 아니라 ‘줄어드는 세금’만 계산합니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ 공유 ═══ -->
+  <section class="block share-block" id="share-block" aria-labelledby="share-title">
+    <div class="block-head">
+      <span class="bno">07</span>
+      <h2 id="share-title">결과 카드와 퍼가기</h2>
+      <p class="bsub">이름·연봉 원액·계약 내용은 카드에 넣지 않습니다. 카톡·스레드에 올리고, 블로그에는 iframe으로 붙이세요.</p>
+    </div>
+    <div class="tile-plain">
+      <div class="share-grid">
+        <div>
+          <ul class="share-points" style="margin-top:0">
+            <li><b>카드에는 총급여 구간만</b> 표시됩니다. 정확한 연봉·월세·계좌는 이미지에 남지 않습니다.</li>
+            <li><b>1080×1350 PNG</b> — 카톡·스레드·인스타 세로 비율에 맞춘 크기입니다.</li>
+            <li><b>iframe 퍼가기</b> — 티스토리·워드프레스에 붙이면 그 자리에서 계산됩니다. <code>?embed=1</code>로 머리말·꼬리말을 뺍니다.</li>
+          </ul>
+          <div class="card-facts">
+            <div class="cf cf-in">
+              <span class="cf-k">카드에 담기는 것</span>
+              <p>총급여 구간 · 연금·월세·카드 3줄 · D-day</p>
+            </div>
+            <div class="cf cf-out">
+              <span class="cf-k">담기지 않는 것</span>
+              <p>이름 · 연봉 원액 · 월세 계약 내용</p>
+            </div>
+          </div>
+          <div class="embed-box embed-copy">
+            <div class="eb-head">
+              <span>퍼가기 코드</span>
+              <button class="btn btn-sm" type="button" id="btn-copy-embed">코드 복사</button>
+            </div>
+            <pre id="embed-code">&lt;iframe src="https://marcj81.github.io/yearend-tax-reverse/?embed=1" width="100%" height="900" style="border:0;max-width:100%;border-radius:16px" title="연말정산 13월의 월급 역산기" loading="lazy"&gt;&lt;/iframe&gt;</pre>
+          </div>
+          <p class="hint" style="margin-top:10px">임베드 뷰에는 하단에 작은 <b>“Powered by 원탭 도구 허브”</b> 링크가 붙습니다. 미리보기: <a href="?embed=1" style="color:var(--accent);border-bottom:1px solid var(--line-strong)">?embed=1</a></p>
+        </div>
+        <div>
+          <div class="card-preview">
+            <canvas id="share-canvas" width="1080" height="1350" role="img" aria-label="역산 결과 공유 카드 미리보기"></canvas>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-accent" type="button" id="btn-card">
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              결과 카드 PNG 저장
+            </button>
+            <button class="btn" type="button" id="btn-copy-summary">요약 문구 복사</button>
+          </div>
+          <p class="hint" style="text-align:center">카드에는 이름·연봉 원액·월세 계약 내용이 들어가지 않습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="block faq-block" id="faq-block" aria-labelledby="faq-title">
+    <div class="block-head">
+      <span class="bno">08</span>
+      <h2 id="faq-title">기준일과 자주 묻는 질문</h2>
+      <p class="bsub">기준일 2026년 11월 21일 · 2026년 귀속(2027년 1~2월 정산) 현행 법령 기준입니다.</p>
+    </div>
+    <div class="tile-plain faq">
+      <details>
+        <summary>홈택스 미리보기와 숫자가 다른데요?</summary>
+        <div class="a">이 도구는 <b>카드·연금·월세·인적공제</b>만으로 줄어드는 세금을 역산합니다. 미리보기는 전년도 지급명세서와 기납부세액, 의료비·교육비·기부금까지 반영한 추정치라 서로 다를 수 있습니다. 미리보기 자체도 “확정 금액이 아니다”라고 안내합니다. 확정은 1월 연말정산 간소화 자료로 확인하세요.</div>
+      </details>
+      <details>
+        <summary>카드 100만원을 더 쓰면 정말 이득인가요?</summary>
+        <div class="a">아닙니다. 신용카드 15%·체크카드 30% 소득공제는 <b>쓴 금액의 일부를 과세표준에서 빼는 것</b>입니다. 100만원을 더 쓰면 세금은 2만~5만원 줄지만 통장에서는 100만원이 나갑니다. 기본한도가 이미 찼다면 0원입니다. 그래서 이 도구는 “더 쓰세요”가 아니라 <b>“이미 쓸 돈이면 체크카드로”</b>라고 말합니다.</div>
+      </details>
+      <details>
+        <summary>연금저축 900만원을 넣으면 148만 5,000원을 그대로 받나요?</summary>
+        <div class="a">총급여 5,500만원 이하라면 납입액의 16.5%(지방소득세 포함), 초과라면 13.2%가 세액공제 됩니다. 다만 <b>결정세액 범위 안에서만</b> 돌려받으므로, 이미 낼 세금이 적다면 실제 감소액은 더 작습니다. 연금저축 단독은 600만원까지만 인정되니 남은 300만원은 IRP로 넣어야 합니다.</div>
+      </details>
+      <details>
+        <summary>월세 1,000만원이면 170만원을 돌려받나요?</summary>
+        <div class="a">월세액의 17%(총급여 5,500만원 이하) 또는 15%(8,000만원 이하)가 소득세에서 빠지고, 지방소득세를 더하면 각각 <b>187만원·165만원</b>입니다. 무주택 세대주, 계약서 주소와 주민등록 주소 일치, 85㎡ 이하 또는 기준시가 4억원 이하 요건이 필요합니다.</div>
+      </details>
+      <details>
+        <summary>입력한 값이 저장되거나 전송되나요?</summary>
+        <div class="a">아니요. 계산은 브라우저 안에서만 이뤄지고, 입력값을 서버로 보내거나 브라우저 저장소에 남기지 않습니다. 새로고침하면 모두 사라집니다.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ═══ 출처 ═══ -->
+  <section class="block sources-block" id="sources-block" aria-labelledby="sources-title">
+    <div class="block-head">
+      <span class="bno">09</span>
+      <h2 id="sources-title">근거 법령과 출처</h2>
+      <p class="bsub">2026-11-21 확인. 세법은 매년 12월 말 개정되므로 2027년 1월에 다시 대조해야 합니다.</p>
+    </div>
+    <div class="tile-plain">
+      <ul class="sources">
+        <li><b>조세특례제한법 §126의2</b> — 신용카드 등 소득공제. 25% 문턱, 공제율 15/30/40%, 기본한도 300·250만원, 자녀 1명 350·275만원, 2명 이상 400·300만원, 추가한도 300·200만원. <a href="https://www.law.go.kr/LSW/lsLinkCommonInfo.do?lsJoLnkSeq=1033186513" target="_blank" rel="noopener">법령 원문</a></li>
+        <li><b>소득세법 §47</b> — 근로소득공제 구간(500만·1,500만·4,500만·1억, 한도 2,000만원).</li>
+        <li><b>소득세법 §55</b> — 종합소득세율 6~45%, 누진공제.</li>
+        <li><b>소득세법 §59</b> — 근로소득세액공제 55%/30%, 총급여별 한도 74만~20만원.</li>
+        <li><b>소득세법 §59의2</b> — 자녀세액공제 1명 25만·2명 55만·3명 이상 95만원.</li>
+        <li><b>소득세법 §59의3</b> — 연금계좌 세액공제 15%/12%(지방세 포함 16.5%/13.2%), 연금저축 600·합산 900만원.</li>
+        <li><b>조세특례제한법 §95의2</b> — 월세 세액공제 17%/15%, 연 1,000만원 한도. <a href="https://nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=239025" target="_blank" rel="noopener">국세청 안내</a></li>
+        <li><b>국세청</b> — 2026년 귀속 연말정산 미리보기 2026.10.28~12.18. <a href="https://www.etaxnews.com/news/articleView.html?idxno=10774" target="_blank" rel="noopener">보도</a></li>
+        <li><b>보건복지부</b> — 2026년 건강보험료율 7.19%(근로자 3.595%), 장기요양보험료율 0.9448%. <a href="https://www.mohw.go.kr/board.es?act=view&amp;bid=0027&amp;list_no=1487279&amp;mid=a10503000000" target="_blank" rel="noopener">보도자료</a></li>
+        <li><b>국세청 「자주 하는 연말정산 실수」</b> — 월세·의료비 3% 문턱·부양가족 요건. <a href="https://www.nts.go.kr/nts/na/ntt/selectNttInfo.do?nttSn=1348212" target="_blank" rel="noopener">안내</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ 관련 도구 ═══ -->
+  <section class="block related-block" aria-labelledby="related-title">
+    <div class="block-head">
+      <span class="bno">10</span>
+      <h2 id="related-title">이어서 쓸 도구</h2>
+    </div>
+    <div class="related">
+      <a class="rel" href="../portal-hub/">
+        <span>
+          <span class="rk">무료 도구 21종</span>
+          <span class="rt">원탭 도구 허브</span>
+          <span class="rd">급여명세서·퇴직금·세금까지 한 번에</span>
+        </span>
+        <span class="ra" aria-hidden="true">→</span>
+      </a>
+      <a class="rel" href="../tax-margin-calculator/">
+        <span>
+          <span class="rk">사업자·프리랜서</span>
+          <span class="rt">부가세·종소세 계산기</span>
+          <span class="rd">3.3% 원천징수와 순수익 계산</span>
+        </span>
+        <span class="ra" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap fin">
+    <div>
+      <p><b>모의 역산입니다.</b> 2026년 귀속 소득세법·조세특례제한법과 국세청 안내를 기준으로 단순화해 계산했습니다. 실제 환급·추납액은 최종 총급여, 기납부세액, 의료비·교육비·기부금, 부양가족 요건에 따라 달라지므로 <b>홈택스 연말정산 미리보기와 회사 정산 결과</b>로 확인해야 합니다.</p>
+      <p style="margin-top:8px">기준일 2026-11-21 · 2026년 귀속 소득세법·조세특례제한법 기준. 입력값은 서버로 전송되지 않고 브라우저 저장소에도 남지 않습니다. 외부 분석 도구를 쓰지 않습니다. · <a href="privacy.html">개인정보 처리방침</a></p>
+    </div>
+    <div class="fmark" aria-hidden="true">
+      <span class="mark">13</span>
+      <span>One-tap tools</span>
+    </div>
+  </div>
+</footer>
+
+<div class="embed-foot" id="embed-foot">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h8M4 9h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  Powered by <a href="https://marcj81.github.io/portal-hub/" target="_blank" rel="noopener">원탭 도구 허브</a>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ==CORE-START== */
+/* 2026년 귀속 연말정산 역산 코어
+   - 소득세법 §47·§55·§59·§59의2·§59의3 / 조세특례제한법 §126의2·§95의2
+   - 브라우저와 node(test.js)에서 같은 코드를 쓴다. 외부 의존성 없음. */
+const TAX_CORE = (function () {
+  'use strict';
+
+  const YEAR = 2026;
+  const MAN = 10000;
+
+  const P = {
+    year: YEAR,
+    card: {
+      splitGross: 70000000,          // 총급여 7천만원 이하 / 초과
+      thresholdRate: 0.25,           // 최저사용금액 = 총급여 × 25%
+      rate: { credit: 0.15, debit: 0.30, market: 0.40, transit: 0.40, culture: 0.30 },
+      base: { low: 3000000, high: 2500000 },
+      childAdd: { low: [0, 500000, 1000000], high: [0, 250000, 500000] },
+      addLimit: { low: 3000000, high: 2000000 },   // 전통시장·대중교통(+문화체육) 추가한도
+      applyUntil: '2028-12-31'
+    },
+    pension: {
+      total: 9000000, savingsCap: 6000000,
+      rate: { low: 0.15, high: 0.12 },   // 소득세 기준(지방세 별도 10%)
+      splitGross: 55000000,
+      isaExtra: 3000000                  // ISA 전환 추가한도(계산에는 미적용)
+    },
+    rent: {
+      limit: 10000000,
+      rate: { low: 0.17, high: 0.15 },   // 소득세 기준(지방세 별도 10%)
+      splitGross: 55000000,
+      maxGross: 80000000
+    },
+    personal: 1500000,
+    standardCredit: 130000,
+    nationalPensionRate: 0.0475,
+    healthInsuranceRate: 0.049673,       // 건강 3.595% + 장기요양 0.4723% + 고용 0.9%
+    localRate: 0.10,
+    childCredit: [0, 250000, 550000, 950000],
+    childStep: 400000,
+    brackets: [
+      { up: 14000000, rate: 0.06, sub: 0 },
+      { up: 50000000, rate: 0.15, sub: 1260000 },
+      { up: 88000000, rate: 0.24, sub: 5760000 },
+      { up: 150000000, rate: 0.35, sub: 15440000 },
+      { up: 300000000, rate: 0.38, sub: 19940000 },
+      { up: 500000000, rate: 0.40, sub: 25940000 },
+      { up: 1000000000, rate: 0.42, sub: 35940000 },
+      { up: Infinity, rate: 0.45, sub: 65940000 }
+    ],
+    deadlines: { preview: { y: 2026, m: 12, d: 18 }, pay: { y: 2026, m: 12, d: 31 } }
+  };
+
+  /* ── 숫자 ─────────────────────────────────────────── */
+  function n(v) {
+    if (v === null || v === undefined || v === '') return 0;
+    if (typeof v === 'number') return isFinite(v) ? Math.max(0, v) : 0;
+    const s = String(v).replace(/[^0-9.]/g, '');
+    if (!s) return 0;
+    const x = parseFloat(s);
+    return isFinite(x) ? Math.max(0, x) : 0;
+  }
+
+  function clampInt(v, lo, hi) {
+    const x = Math.round(n(v));
+    return Math.min(hi, Math.max(lo, x));
+  }
+
+  function money(v) {
+    const x = Math.round(Math.abs(n(v)));
+    return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  /** 684000 → '68만 4,000원' */
+  function manwon(v) {
+    const x = Math.round(n(v));
+    if (x === 0) return '0원';
+    const man = Math.floor(x / MAN);
+    const rest = x % MAN;
+    if (man === 0) return money(rest) + '원';
+    if (rest === 0) return money(man) + '만원';
+    return money(man) + '만 ' + money(rest) + '원';
+  }
+
+  /** 1,250만원 형태(만원 미만 절사 아님, 원 단위 그대로) */
+  function manLabel(v) {
+    const x = Math.round(n(v));
+    if (x % MAN === 0) return money(x / MAN) + '만원';
+    return manwon(x);
+  }
+
+  function pct(r) {
+    return (Math.round(r * 1000) / 10).toFixed(1).replace(/\.0$/, '') + '%';
+  }
+
+  /* ── 근로소득공제 (소득세법 §47) ───────────────────── */
+  function earnedDeduction(gross) {
+    const g = n(gross);
+    let d;
+    if (g <= 5000000) d = g * 0.70;
+    else if (g <= 15000000) d = 3500000 + (g - 5000000) * 0.40;
+    else if (g <= 45000000) d = 7500000 + (g - 15000000) * 0.15;
+    else if (g <= 100000000) d = 12000000 + (g - 45000000) * 0.05;
+    else d = 14750000 + (g - 100000000) * 0.02;
+    return Math.min(20000000, Math.round(d));
+  }
+
+  /* ── 종합소득세 (소득세법 §55) ─────────────────────── */
+  function bracketOf(base) {
+    const b = Math.max(0, n(base));
+    for (let i = 0; i < P.brackets.length; i++) {
+      if (b <= P.brackets[i].up) {
+        const prev = i === 0 ? 0 : P.brackets[i - 1].up;
+        return { rate: P.brackets[i].rate, sub: P.brackets[i].sub, over: prev, up: P.brackets[i].up, index: i };
+      }
+    }
+    return { rate: 0.45, sub: 65940000, over: 1000000000, up: Infinity, index: 7 };
+  }
+
+  function progressive(base) {
+    const b = Math.max(0, Math.round(n(base)));
+    const br = bracketOf(b);
+    return Math.max(0, Math.floor(b * br.rate) - br.sub);
+  }
+
+  /* ── 근로소득세액공제 (소득세법 §59) ───────────────── */
+  function earnedCreditRaw(tax) {
+    const t = Math.max(0, n(tax));
+    return t <= 1300000 ? t * 0.55 : 715000 + (t - 1300000) * 0.30;
+  }
+
+  function earnedCreditLimit(gross) {
+    const g = Math.max(0, n(gross));
+    if (g <= 33000000) return 740000;
+    if (g <= 70000000) return Math.max(660000, 740000 - (g - 33000000) * 0.008);
+    if (g <= 120000000) return Math.max(500000, 660000 - (g - 70000000) * 0.5);
+    return Math.max(200000, 500000 - (g - 120000000) * 0.5);
+  }
+
+  /* ── 자녀세액공제 (소득세법 §59의2) ────────────────── */
+  function childCredit(children) {
+    const c = clampInt(children, 0, 10);
+    if (c === 0) return 0;
+    if (c === 1) return P.childCredit[1];
+    if (c === 2) return P.childCredit[2];
+    return P.childCredit[3] + (c - 3) * P.childStep;
+  }
+
+  /* ── 신용카드 등 소득공제 (조특법 §126의2) ─────────── */
+  function cardDeduction(o) {
+    const opt = o || {};
+    const gross = n(opt.gross);
+    const children = clampInt(opt.children, 0, 10);
+    const credit = n(opt.credit);
+    const debit = n(opt.debit);
+    const market = n(opt.market);
+    const transit = n(opt.transit);
+    const low = gross <= P.card.splitGross;
+    const culture = low ? n(opt.culture) : 0;    // 문화체육 30%는 7천만원 이하만
+    const debitPool = debit + culture;
+
+    const threshold = gross * P.card.thresholdRate;
+    const total = credit + debit + market + transit + culture;
+
+    // 문턱(최저사용금액) 차감: 신용 → 체크·현금·문화 → 전통시장 → 대중교통
+    let rem = threshold;
+    const useC = Math.min(credit, rem); rem -= useC;
+    const useD = Math.min(debitPool, rem); rem -= useD;
+    const useM = Math.min(market, rem); rem -= useM;
+    const useT = Math.min(transit, rem); rem -= useT;
+
+    const amtC = Math.round((credit - useC) * P.card.rate.credit);
+    const amtD = Math.round((debitPool - useD) * P.card.rate.debit);
+    const amtM = Math.round((market - useM) * P.card.rate.market);
+    const amtT = Math.round((transit - useT) * P.card.rate.transit);
+    const raw = amtC + amtD + amtM + amtT;
+
+    const childBonus = low
+      ? (children >= 2 ? 1000000 : children === 1 ? 500000 : 0)
+      : (children >= 2 ? 500000 : children === 1 ? 250000 : 0);
+    const baseLimit = (low ? P.card.base.low : P.card.base.high) + childBonus;
+    const addLimit = low ? P.card.addLimit.low : P.card.addLimit.high;
+
+    const baseApplied = Math.min(raw, baseLimit);
+    const excess = Math.max(0, raw - baseApplied);
+    const addPool = amtM + amtT + (low ? Math.round(culture * P.card.rate.culture) : 0);
+    const addApplied = Math.min(excess, addPool, addLimit);
+
+    return {
+      gross, children, low, threshold, total,
+      used: { credit: useC, debit: useD, market: useM, transit: useT },
+      amount: { credit: amtC, debit: amtD, market: amtM, transit: amtT, culture: low ? Math.round(culture * P.card.rate.culture) : 0 },
+      raw, deduction: baseApplied + addApplied,
+      baseLimit, childBonus, baseApplied, remainingBase: Math.max(0, baseLimit - baseApplied),
+      addLimit, addPool, addApplied, excess,
+      remainingAdd: Math.max(0, Math.min(addLimit, addPool) - addApplied),
+      room: Math.max(0, baseLimit - baseApplied) + Math.max(0, Math.min(addLimit, addPool) - addApplied),
+      maxDeduction: baseLimit + addLimit,
+      rate: P.card.rate
+    };
+  }
+
+  /* ── 연금계좌 세액공제 (소득세법 §59의3) ───────────── */
+  function pension(gross, savings, irp) {
+    const g = n(gross);
+    const sv = n(savings);
+    const ir = n(irp);
+    const savingsUsed = Math.min(sv, P.pension.savingsCap);
+    const irpUsed = Math.min(ir, P.pension.total - savingsUsed);
+    const used = savingsUsed + irpUsed;
+    const rate = g <= P.pension.splitGross ? P.pension.rate.low : P.pension.rate.high;
+    return {
+      paid: sv + ir, savings: sv, irp: ir,
+      savingsUsed, irpUsed, used,
+      remaining: Math.max(0, P.pension.total - used),
+      savingsRoom: Math.max(0, P.pension.savingsCap - savingsUsed),
+      irpRoom: Math.max(0, P.pension.total - savingsUsed - irpUsed),
+      savingsWaste: Math.max(0, sv - P.pension.savingsCap),
+      limit: P.pension.total, savingsCap: P.pension.savingsCap,
+      rate, credit: Math.round(used * rate),
+      nominalGain: Math.round(used * rate * (1 + P.localRate))
+    };
+  }
+
+  /* ── 월세 세액공제 (조특법 §95의2) ────────────────── */
+  function rent(gross, monthly) {
+    const g = n(gross);
+    const m = n(monthly);
+    const annual = m * 12;
+    const base = Math.min(annual, P.rent.limit);
+    let rate = 0;
+    if (g <= P.rent.splitGross) rate = P.rent.rate.low;
+    else if (g <= P.rent.maxGross) rate = P.rent.rate.high;
+    const credit = Math.round(base * rate);
+    return {
+      monthly: m, annual, base, rate, credit,
+      total: Math.round(credit * (1 + P.localRate)),
+      eligible: m > 0 && rate > 0,
+      capped: annual > P.rent.limit
+    };
+  }
+
+  /* ── 전체 계산 ────────────────────────────────────── */
+  function calc(input) {
+    const o = input || {};
+    const gross = n(o.gross);
+    const children = clampInt(o.children, 0, 10);
+    const extra = clampInt(o.extraDependents, 0, 10);
+    const dependents = 1 + children + extra;
+
+    const earned = earnedDeduction(gross);
+    const earnedIncome = Math.max(0, gross - earned);
+    const personal = P.personal * dependents;
+    const np = Math.round(gross * P.nationalPensionRate);
+    const health = Math.round(gross * P.healthInsuranceRate);
+    const card = cardDeduction({
+      gross, children,
+      credit: o.credit, debit: o.debit, market: o.market, transit: o.transit, culture: o.culture
+    });
+    const pen = pension(gross, o.pensionSavings, o.pensionIrp);
+    const rt = rent(gross, o.rentMonthly);
+    const child = childCredit(children);
+
+    function variant(useHealth, useStandard, useRent) {
+      const ded = personal + np + card.deduction + (useHealth ? health : 0);
+      const taxBase = Math.max(0, earnedIncome - ded);
+      const tax = progressive(taxBase);
+      const earnCredit = Math.min(earnedCreditLimit(gross), Math.round(earnedCreditRaw(tax)));
+      const items = [
+        { key: 'earned', label: '근로소득세액공제', amount: earnCredit },
+        { key: 'child', label: '자녀세액공제', amount: child },
+        { key: 'pension', label: '연금계좌 세액공제', amount: pen.credit },
+        { key: 'rent', label: '월세 세액공제', amount: useRent ? rt.credit : 0 },
+        { key: 'standard', label: '표준세액공제', amount: useStandard ? P.standardCredit : 0 }
+      ].filter(function (x) { return x.amount > 0; });
+      const credits = items.reduce(function (s, x) { return s + x.amount; }, 0);
+      const applied = Math.min(credits, tax);
+      const incomeTax = Math.max(0, tax - applied);
+      const local = Math.round(incomeTax * P.localRate);
+      return {
+        useHealth: !!useHealth, useStandard: !!useStandard, useRent: !!useRent,
+        deduction: ded, taxBase, tax, items: items, credits: credits, creditsApplied: applied,
+        creditsLimited: credits > tax, incomeTax: incomeTax, localTax: local, totalTax: incomeTax + local
+      };
+    }
+
+    const A = variant(true, false, true);    // 건강·고용보험 소득공제 + 월세 세액공제
+    const B = variant(false, true, false);   // 표준세액공제 13만원
+    const chosen = A.totalTax <= B.totalTax ? A : B;
+
+    return {
+      gross, children, extraDependents: extra, dependents,
+      earned, earnedIncome, personal, nationalPension: np, health,
+      card, pension: pen, rent: rt, childCredit: child,
+      variantA: A, variantB: B, option: A.totalTax <= B.totalTax ? 'A' : 'B',
+      deduction: chosen.deduction, taxBase: chosen.taxBase, tax: chosen.tax,
+      creditItems: chosen.items, credits: chosen.credits, creditsApplied: chosen.creditsApplied,
+      creditsLimited: chosen.creditsLimited, incomeTax: chosen.incomeTax, localTax: chosen.localTax,
+      totalTax: chosen.totalTax, bracket: bracketOf(chosen.taxBase)
+    };
+  }
+
+  /* ── 연금 한도 채우기 ─────────────────────────────── */
+  function topUp(input) {
+    const sv = n(input.pensionSavings);
+    const ir = n(input.pensionIrp);
+    const savingsUsed = Math.min(sv, P.pension.savingsCap);
+    const irpUsed = Math.min(ir, P.pension.total - savingsUsed);
+    const remaining = Math.max(0, P.pension.total - savingsUsed - irpUsed);
+    const addS = Math.min(remaining, Math.max(0, P.pension.savingsCap - sv));
+    const addI = remaining - addS;
+    return {
+      remaining, addS, addI,
+      input: Object.assign({}, input, { pensionSavings: sv + addS, pensionIrp: ir + addI })
+    };
+  }
+
+  /* ── D-day ────────────────────────────────────────── */
+  function kstParts(ms) {
+    const d = new Date(ms + 9 * 3600 * 1000);
+    return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate() };
+  }
+
+  function daysUntil(target, nowMs) {
+    const t = kstParts(nowMs);
+    const a = Date.UTC(t.y, t.m - 1, t.d);
+    const b = Date.UTC(target.y, target.m - 1, target.d);
+    return Math.round((b - a) / 86400000);
+  }
+
+  function dday(now) {
+    const ms = now instanceof Date ? now.getTime() : (typeof now === 'number' ? now : Date.now());
+    const today = kstParts(ms);
+    const pv = daysUntil(P.deadlines.preview, ms);
+    const pay = daysUntil(P.deadlines.pay, ms);
+    function label(d) {
+      if (d > 0) return 'D-' + d;
+      if (d === 0) return '오늘 마감';
+      return '마감 ' + (-d) + '일';
+    }
+    return {
+      today, preview: pv, pay: pay,
+      previewLabel: label(pv), payLabel: label(pay),
+      previewPassed: pv < 0, payPassed: pay < 0,
+      year: P.year
+    };
+  }
+
+  /* ── 역산 요약 ────────────────────────────────────── */
+  function analyze(input, now) {
+    const base = calc(input);
+    const top = topUp(input);
+    const topped = top.remaining > 0 ? calc(top.input) : base;
+    const pensionGain = Math.max(0, base.totalTax - topped.totalTax);
+    const pensionNominal = Math.round(top.remaining * base.pension.rate * (1 + P.localRate));
+    const rentGain = base.rent.eligible ? Math.round(base.rent.credit * (1 + P.localRate)) : 0;
+    const hero = pensionGain + rentGain;
+
+    const step = 100 * MAN;   // 100만원
+    const plusCredit = calc(Object.assign({}, input, { credit: n(input.credit) + step }));
+    const plusDebit = calc(Object.assign({}, input, { debit: n(input.debit) + step }));
+    const gainCredit = Math.max(0, base.totalTax - plusCredit.totalTax);
+    const gainDebit = Math.max(0, base.totalTax - plusDebit.totalTax);
+
+    return {
+      input, base, card: base.card, pension: base.pension, rent: base.rent,
+      top: top, pensionGain: pensionGain, pensionNominal: pensionNominal, rentGain: rentGain,
+      hero: hero, hasInput: n(input.gross) > 0,
+      compare: {
+        step: step, gainCredit: gainCredit, gainDebit: gainDebit,
+        diff: Math.max(gainCredit, gainDebit) - Math.min(gainCredit, gainDebit),
+        best: gainDebit > gainCredit ? 'debit' : (gainCredit > gainDebit ? 'credit' : 'tie')
+      },
+      dday: dday(now || Date.now())
+    };
+  }
+
+  return {
+    YEAR: YEAR, MAN: MAN, P: P,
+    n: n, money: money, manwon: manwon, manLabel: manLabel, pct: pct,
+    earnedDeduction: earnedDeduction, progressive: progressive, bracketOf: bracketOf,
+    earnedCreditRaw: earnedCreditRaw, earnedCreditLimit: earnedCreditLimit, childCredit: childCredit,
+    cardDeduction: cardDeduction, pension: pension, rent: rent,
+    calc: calc, topUp: topUp, analyze: analyze, dday: dday
+  };
+})();
+/* ==CORE-END== */
+</script>
+
+<script>
+(function () {
+  'use strict';
+  const C = TAX_CORE;
+  const $ = function (s, r) { return (r || document).querySelector(s); };
+  const $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  const state = { input: null, a: null };
+
+  const SAMPLE = {
+    gross: '5,500', credit: '2,000', debit: '600', transit: '80', market: '100',
+    pension: '300', irp: '0', rent: '60'
+  };
+
+  function man(v) { return C.n(v) * C.MAN; }
+
+  function readInputs() {
+    const seg = $('#seg-children [aria-pressed="true"]');
+    return {
+      gross: man($('#in-gross').value),
+      children: seg ? Number(seg.dataset.v) : 0,
+      credit: man($('#in-credit').value),
+      debit: man($('#in-debit').value),
+      transit: man($('#in-transit').value),
+      market: man($('#in-market').value),
+      pensionSavings: man($('#in-pension').value),
+      pensionIrp: man($('#in-irp').value),
+      rentMonthly: man($('#in-rent').value),
+      extraDependents: C.n($('#in-extra').value)
+    };
+  }
+
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove('on'); }, 2400);
+  }
+
+  function setDday() {
+    const d = C.dday(new Date());
+    const pv = $('#dday-preview'), pay = $('#dday-pay');
+    pv.textContent = d.previewLabel;
+    pay.textContent = d.payLabel;
+    pv.className = 'dday' + (d.previewPassed ? ' past' : (d.preview <= 3 ? ' due' : ''));
+    pay.className = 'dday due' + (d.payPassed ? ' past' : '');
+    $('#mini-dday').textContent = d.previewLabel;
+    $('#mini-pay').textContent = d.payLabel;
+    const h = $('#h1-dday'), lead = $('#h1-lead'), tail = $('#h1-tail');
+    if (d.payPassed) {
+      lead.textContent = '2026년 귀속 연말정산은';
+      h.textContent = '마감';
+      tail.textContent = '됐습니다';
+    } else {
+      h.textContent = d.pay + '일';
+    }
+    return d;
+  }
+
+  function emptySummary() {
+    $('#hero-label').textContent = '총급여를 넣으면 바로 계산됩니다';
+    $('#hero-num').textContent = '—';
+    $('#hero-num').className = 'is-empty';
+    $('#hero-note').textContent = '지방소득세 포함 · 결정세액 범위 안에서만';
+    $('#sum-pension').textContent = '—';
+    $('#sum-rent').textContent = '—';
+    $('#sum-card').textContent = '—';
+    $('#sum-pension').className = 'v zero';
+    $('#sum-rent').className = 'v zero';
+    $('#sum-card').className = 'v zero';
+    $('#live-chip').textContent = '—';
+  }
+
+  function renderSummary(a) {
+    const gross = a.input.gross;
+    if (!a.hasInput) { emptySummary(); return; }
+
+    $('#hero-label').textContent = a.hero > 0
+      ? '12/31까지 챙길 수 있는 세금'
+      : '12/31까지 더 챙길 세금은 없습니다';
+    $('#hero-num').textContent = a.hero > 0 ? C.manwon(a.hero) : '0원';
+    $('#hero-num').className = '';
+    $('#hero-note').textContent = a.hero > 0
+      ? '연금 추가 납입 ' + C.manwon(a.pensionGain) + ' + 월세 ' + C.manwon(a.rentGain) + ' · 지방세 포함'
+      : (a.base.incomeTax === 0
+        ? '낼 소득세가 이미 0원입니다. 공제를 더 받아도 돌려받을 세금이 없습니다.'
+        : '카드·연금 한도를 이미 채웠다면 12/18 미리보기로 기납부세액을 확인하세요');
+
+    const pen = a.pension, rt = a.rent, card = a.card;
+    $('#sum-pension-k').textContent = pen.remaining > 0
+      ? C.manwon(pen.remaining) + ' 남음'
+      : '900만원 한도 완료';
+    $('#sum-pension').textContent = pen.remaining > 0 ? '+' + C.manwon(a.pensionGain) : '+0원';
+    $('#sum-pension').className = 'v' + (a.pensionGain > 0 ? '' : ' zero');
+
+    $('#sum-rent-k').textContent = rt.eligible
+      ? C.manLabel(rt.base) + ' × ' + C.pct(rt.rate)
+      : (C.n(a.input.rentMonthly) > 0 ? '요건 확인 필요' : '무주택 세대주');
+    $('#sum-rent').textContent = rt.eligible ? '+' + C.manwon(a.rentGain) : '+0원';
+    $('#sum-rent').className = 'v' + (rt.eligible ? '' : ' zero');
+
+    let cardTxt;
+    if (card.raw <= 0) {
+      const left = Math.max(0, card.threshold - card.total);
+      cardTxt = left > 0 ? '문턱 ' + C.manwon(left) + ' 남음' : '공제 0원';
+    } else if (card.room > 0 && (a.compare.gainCredit > 0 || a.compare.gainDebit > 0)) {
+      cardTxt = '여유 ' + C.manLabel(card.room);
+    } else {
+      cardTxt = '한도 완료';
+    }
+    $('#sum-card-k').textContent = card.total < card.threshold
+      ? C.manLabel(card.threshold - card.total) + ' 남음'
+      : (card.total > 0 ? '문턱 ' + C.manLabel(card.total - card.threshold) + ' 초과' : '25% 문턱·한도');
+    $('#sum-card').textContent = cardTxt;
+    $('#sum-card').className = 'v' + (card.raw > 0 ? '' : ' zero');
+
+    $('#live-chip').textContent = a.hero > 0 ? C.manwon(a.hero) : '0원';
+  }
+
+  function renderActions(a) {
+    const list = $('#action-list');
+    const items = [];
+
+    if (!a.hasInput) {
+      const intro = [
+        { title: '총급여를 넣으면 연금계좌 한도가 계산됩니다', tag: '먼저', note: '총급여 5,500만원을 기준으로 세액공제율 16.5%와 13.2%가 갈립니다.', amount: 0 },
+        { title: '월세를 냈다면 17%를 돌려받습니다', tag: '이미 낸 돈', note: '월 60만원이면 연 720만원 × 17% = 122만 4,000원(소득세).', amount: 0 },
+        { title: '카드 사용액을 넣으면 25% 문턱을 판정합니다', tag: '확인', note: '문턱을 넘기 전에는 어떤 카드로 써도 공제가 0원입니다.', amount: 0 }
+      ];
+      list.innerHTML = intro.map(function (it, i) {
+        return '<li><span class="arank">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span><span class="atitle">' + it.title + '<span class="tag">' + it.tag + '</span></span>' +
+          '<span class="anote">' + it.note + '</span></span><span class="aval dim">—</span></li>';
+      }).join('');
+      return;
+    }
+
+    const pen = a.pension, rt = a.rent, card = a.card, inp = a.input;
+
+    if (pen.remaining > 0 && a.pensionGain <= 0) {
+      items.push({
+        title: '연금계좌에 ' + C.manwon(pen.remaining) + ' 여유가 있습니다',
+        tag: '세금 0원', tagClass: '',
+        note: '낼 세금이 이미 0원이라 더 넣어도 돌려받는 세금은 늘지 않습니다. 내년 한도로 기억해 두세요.',
+        amount: 0
+      });
+    } else if (pen.remaining > 0) {
+      const parts = [];
+      if (a.top.addS > 0) parts.push('연금저축 ' + C.manwon(a.top.addS));
+      if (a.top.addI > 0) parts.push('IRP ' + C.manwon(a.top.addI));
+      items.push({
+        title: '연금저축·IRP에 ' + C.manwon(pen.remaining) + ' 더 넣기',
+        tag: '추가 지출 0', tagClass: 'free',
+        note: (parts.join(' + ') || '한도까지') + ' · 세액공제 ' + C.pct(pen.rate * 1.1) + ' · 12/31 입금 마감',
+        amount: a.pensionGain,
+        amountNote: a.pensionGain < a.pensionNominal ? '세액 한도 적용' : '지방세 포함'
+      });
+    } else {
+      items.push({
+        title: '연금계좌 900만원 한도를 다 채웠습니다',
+        tag: '완료', tagClass: '',
+        note: '더 넣어도 세액공제는 늘지 않습니다. 초과분은 다음 해로 넘길 수 있는지 금융사에 확인하세요.',
+        amount: 0
+      });
+    }
+
+    if (rt.eligible) {
+      items.push({
+        title: '월세 세액공제 ' + C.manwon(a.rentGain) + ' 챙기기',
+        tag: '이미 낸 돈', tagClass: 'claim',
+        note: '연 월세 ' + C.manLabel(rt.base) + ' × ' + C.pct(rt.rate) + ' · 등본·계약서·납부내역 제출',
+        amount: a.rentGain,
+        amountNote: '지방세 포함'
+      });
+    } else if (C.n(inp.rentMonthly) > 0) {
+      items.push({
+        title: '월세 공제 요건을 확인하세요',
+        tag: '확인', tagClass: '',
+        note: '총급여 8,000만원 초과이거나 무주택·전입 요건이 맞지 않으면 공제되지 않습니다.',
+        amount: 0
+      });
+    } else {
+      items.push({
+        title: '월세를 낸다면 17%를 돌려받습니다',
+        tag: '확인', tagClass: '',
+        note: '월 60만원이면 연 720만원 → 세금 122만원대. 무주택 세대주·전입신고가 조건입니다.',
+        amount: 0
+      });
+    }
+
+    if (card.raw <= 0) {
+      const left = Math.max(0, card.threshold - card.total);
+      items.push({
+        title: left > 0 ? '카드 문턱까지 ' + C.manwon(left) + ' 남았습니다' : '카드 공제가 0원입니다',
+        tag: '더 써야 함', tagClass: 'spend',
+        note: left > 0
+          ? '문턱을 넘기 전에는 어떤 카드로 써도 공제가 0원입니다. 새로 쓰면서 채우는 건 손해입니다.'
+          : '사용액이 없습니다. 이미 쓸 돈이 있다면 체크카드로 결제하세요.',
+        amount: 0
+      });
+    } else if (card.room > 0 && (a.compare.gainCredit > 0 || a.compare.gainDebit > 0)) {
+      items.push({
+        title: '카드 공제 여유 ' + C.manLabel(card.room),
+        tag: '더 써야 함', tagClass: 'spend',
+        note: '체크카드로 100만원 더 쓰면 세금 ' + C.manwon(a.compare.gainDebit) + ' (신용카드는 ' + C.manwon(a.compare.gainCredit) + ')',
+        amount: 0
+      });
+    } else {
+      items.push({
+        title: '카드 소득공제 한도를 다 채웠습니다',
+        tag: '완료', tagClass: '',
+        note: '더 쓰면 공제는 0원입니다. 남은 카드 사용은 세금과 무관합니다.',
+        amount: 0
+      });
+    }
+
+    list.innerHTML = items.map(function (it, i) {
+      const amt = it.amount > 0
+        ? '<span class="aval">' + C.manwon(it.amount) + '<small>' + (it.amountNote || '') + '</small></span>'
+        : '<span class="aval dim">—</span>';
+      return '<li><span class="arank">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span><span class="atitle">' + it.title + (it.tag ? '<span class="tag ' + it.tagClass + '">' + it.tag + '</span>' : '') + '</span>' +
+        '<span class="anote">' + it.note + '</span></span>' + amt + '</li>';
+    }).join('');
+  }
+
+  function renderCard(a) {
+    const card = a.card;
+    $('#card-threshold').textContent = C.manLabel(card.threshold);
+    $('#card-threshold-sub').textContent = '총급여 ' + C.manLabel(a.input.gross) + ' × 25%';
+    $('#card-total').textContent = C.manLabel(card.total);
+    $('#card-total-sub').textContent = '신용 ' + C.manLabel(C.n(a.input.credit)) + ' · 체크 ' + C.manLabel(C.n(a.input.debit)) +
+      ' · 교통 ' + C.manLabel(C.n(a.input.transit)) + ' · 시장 ' + C.manLabel(C.n(a.input.market));
+    $('#card-deduction').textContent = C.manwon(card.deduction);
+    $('#card-deduction-sub').textContent = '기본 ' + C.manwon(card.baseApplied) + ' + 추가 ' + C.manwon(card.addApplied);
+
+    const bp = card.baseLimit ? Math.min(100, card.baseApplied / card.baseLimit * 100) : 0;
+    const ap = card.addLimit ? Math.min(100, card.addApplied / card.addLimit * 100) : 0;
+    $('#gauge-base').style.width = bp + '%';
+    $('#gauge-add').style.width = ap + '%';
+    $('#gauge-base-val').textContent = C.manwon(card.baseApplied) + ' / ' + C.manwon(card.baseLimit);
+    $('#gauge-add-val').textContent = C.manwon(card.addApplied) + ' / ' + C.manwon(card.addLimit);
+    $('#gauge-base-left').textContent = card.remainingBase > 0 ? '남은 기본한도 ' + C.manwon(card.remainingBase) : '기본한도 소진';
+    $('#gauge-base-limit').textContent = card.childBonus > 0 ? '자녀 '+ a.input.children +'명 +' + C.manwon(card.childBonus) : '자녀 없음';
+    $('#gauge-add-left').textContent = card.remainingAdd > 0 ? '남은 추가한도 ' + C.manwon(card.remainingAdd) : '추가한도 소진';
+    $('#gauge-add-limit').textContent = '전통시장·대중교통 공제액 ' + C.manwon(card.addPool);
+
+    const callout = $('#threshold-callout');
+    const left = card.threshold - card.total;
+    callout.style.display = 'flex';
+    if (card.total <= 0) {
+      callout.className = 'callout';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.6v4.2M8 11.2v.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>카드 사용액을 넣으면 <b>문턱까지 남은 금액</b>과 <b>100만원을 더 쓸 때의 차이</b>를 계산합니다.</span>';
+    } else if (left > 0) {
+      callout.className = 'callout warn';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2 14.4 13H1.6L8 2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6.2v3M8 11.1v.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span><b>문턱까지 ' + C.manwon(left) + ' 남았습니다.</b> 이 구간에서는 신용카드든 체크카드든 공제가 0원입니다. 새로 쓰면서 채우면 쓴 돈의 100%가 나가고 돌아오는 건 15~30%뿐입니다.</span>';
+    } else {
+      callout.className = 'callout ok';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="m5.2 8.2 1.9 1.9 3.7-3.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>문턱을 ' + C.manwon(card.total - card.threshold) + ' 넘겼습니다.</b> 이제부터 쓰는 금액에 공제율이 붙습니다. 신용 15%보다 체크·현금 30%가 두 배입니다.</span>';
+    }
+
+    $('#cmp-credit').textContent = C.manwon(a.compare.gainCredit);
+    $('#cmp-debit').textContent = C.manwon(a.compare.gainDebit);
+    const creditWrap = $('#cmp-credit-wrap'), debitWrap = $('#cmp-debit-wrap');
+    creditWrap.classList.toggle('best', a.compare.best === 'credit');
+    debitWrap.classList.toggle('best', a.compare.best === 'debit');
+    $('#pick-credit').hidden = a.compare.best !== 'credit';
+    $('#pick-debit').hidden = a.compare.best !== 'debit';
+
+    const ctext = $('#spend-callout-text');
+    const spend = $('#spend-callout');
+    if (a.compare.gainCredit === 0 && a.compare.gainDebit === 0) {
+      spend.className = 'callout';
+      ctext.innerHTML = '지금은 100만원을 더 써도 <b>줄어드는 세금이 0원</b>입니다. 문턱을 못 넘었거나 한도가 이미 찼기 때문입니다.';
+    } else {
+      spend.className = 'callout danger';
+      ctext.innerHTML = '100만원을 더 쓰면 세금은 <b>' + C.manwon(Math.max(a.compare.gainCredit, a.compare.gainDebit)) + '</b> 줄지만, 통장에서는 <b>100만원</b>이 나갑니다. 순손실 ' + C.manwon(a.compare.step - Math.max(a.compare.gainCredit, a.compare.gainDebit)) + '입니다.';
+    }
+
+    // 표
+    const rows = [
+      ['신용카드', C.manLabel(C.n(a.input.credit)), C.manwon(card.amount.credit)],
+      ['체크·현금영수증', C.manLabel(C.n(a.input.debit)), C.manwon(card.amount.debit)],
+      ['대중교통 40%', C.manLabel(C.n(a.input.transit)), C.manwon(card.amount.transit)],
+      ['전통시장 40%', C.manLabel(C.n(a.input.market)), C.manwon(card.amount.market)]
+    ];
+    $('#card-table').innerHTML = rows.map(function (r) {
+      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td></tr>';
+    }).join('') +
+      '<tr class="total"><td>공제액 합계 → 한도 적용</td><td class="mut">기본 ' + C.manwon(card.baseLimit) + ' + 추가 ' + C.manwon(card.addLimit) + '</td><td>' + C.manwon(card.deduction) + '</td></tr>';
+  }
+
+  function renderPension(a) {
+    const pen = a.pension;
+    $('#pen-used').textContent = C.manwon(pen.used);
+    $('#pen-used-sub').textContent = '연금저축 ' + C.manwon(pen.savingsUsed) + ' + IRP ' + C.manwon(pen.irpUsed);
+    $('#pen-rate').textContent = C.pct(pen.rate * 1.1);
+    $('#pen-rate-sub').textContent = pen.rate === 0.15
+      ? '지방세 포함 · 소득세 15% + 지방 1.5%'
+      : '지방세 포함 · 소득세 12% + 지방 1.2%';
+    $('#pen-gain').textContent = pen.remaining > 0 ? C.manwon(a.pensionGain) : '0원';
+    $('#pen-gain-sub').textContent = pen.remaining > 0
+      ? (a.pensionGain < a.pensionNominal ? '세액 한도 때문에 계산상 ' + C.manwon(a.pensionNominal) + '보다 작음' : '남은 ' + C.manLabel(pen.remaining) + ' 납입 시')
+      : '한도를 다 채웠습니다';
+
+    const pp = Math.min(100, pen.used / pen.limit * 100);
+    $('#gauge-pen').style.width = pp + '%';
+    $('#gauge-pen-val').textContent = C.manwon(pen.used) + ' / ' + C.manwon(pen.limit);
+    $('#gauge-pen-left').textContent = pen.remaining > 0 ? '남은 한도 ' + C.manwon(pen.remaining) : '한도 소진';
+
+    $('#pen-savings').textContent = C.manwon(pen.savingsUsed);
+    $('#pen-savings-sub').textContent = pen.savingsWaste > 0
+      ? '한도 초과 ' + C.manwon(pen.savingsWaste) + '은 공제되지 않습니다'
+      : '연 600만원 한도 중';
+    $('#pen-irp').textContent = C.manwon(pen.irpRoom);
+    $('#pen-irp-sub').textContent = pen.irpRoom > 0 ? '합산 900만원까지' : 'IRP 한도도 소진';
+
+    const callout = $('#pen-callout');
+    if (pen.savingsWaste > 0) {
+      callout.style.display = 'flex';
+      callout.className = 'callout warn';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2 14.4 13H1.6L8 2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6.2v3M8 11.1v.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span>연금저축에 <b>' + C.manwon(pen.savingsWaste) + '</b>을 초과 납입했습니다. 연금저축 단독은 600만원까지만 공제되니, 남은 금액은 <b>IRP로 나눠 넣어야</b> 공제됩니다.</span>';
+    } else if (pen.remaining > 0 && a.pensionGain < a.pensionNominal) {
+      callout.style.display = 'flex';
+      callout.className = 'callout';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.6v4.2M8 11.2v.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>낼 세금이 이미 적어서, 한도를 채워도 실제 감소액은 <b>' + C.manwon(a.pensionGain) + '</b>입니다. 세액공제는 결정세액을 넘을 수 없습니다.</span>';
+    } else {
+      callout.style.display = 'none';
+    }
+  }
+
+  function renderRent(a) {
+    const rt = a.rent;
+    $('#rent-rate').textContent = rt.rate > 0 ? C.pct(rt.rate) : '대상 아님';
+    $('#rent-rate-sub').textContent = rt.rate === 0.17 ? '총급여 5,500만원 이하 · 지방세 포함 18.7%'
+      : rt.rate === 0.15 ? '총급여 5,500~8,000만원 · 지방세 포함 16.5%'
+      : '총급여 8,000만원 초과 또는 월세 미입력';
+    $('#rent-base').textContent = rt.monthly > 0 ? C.manLabel(rt.base) : '—';
+    $('#rent-credit').textContent = rt.eligible ? C.manwon(rt.total) : '—';
+
+    const callout = $('#rent-callout');
+    if (rt.eligible) {
+      callout.style.display = 'flex';
+      callout.className = 'callout ok';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="m5.2 8.2 1.9 1.9 3.7-3.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>월세 ' + C.manLabel(rt.base) + ' × ' + C.pct(rt.rate) + ' = <b>' + C.manwon(rt.credit) + '</b>(소득세), 지방소득세 포함 <b>' + C.manwon(rt.total) + '</b>. 월세 세액공제를 받으면 표준세액공제 13만원은 적용되지 않으며, 계산에 이미 반영했습니다.</span>';
+    } else if (rt.monthly > 0) {
+      callout.style.display = 'flex';
+      callout.className = 'callout warn';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2 14.4 13H1.6L8 2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6.2v3M8 11.1v.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span>총급여가 8,000만원을 넘으면 월세 세액공제 대상이 아닙니다. 총급여를 다시 확인하세요.</span>';
+    } else {
+      callout.style.display = 'flex';
+      callout.className = 'callout';
+      callout.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.6v4.2M8 11.2v.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>월세를 넣으면 공제액을 계산합니다. 월 60만원이면 연 720만원 × 17% = <b>122만 4,000원</b>(소득세)입니다.</span>';
+    }
+  }
+
+  function renderProcess(a) {
+    const rows = [];
+    rows.push(['총급여', C.manwon(a.gross), '비과세 제외']);
+    rows.push(['근로소득공제', '− ' + C.manwon(a.earned), '소득세법 §47']);
+    rows.push(['근로소득금액', C.manwon(a.earnedIncome), '']);
+    rows.push(['인적공제', '− ' + C.manwon(a.personal), '본인+부양가족 ' + a.dependents + '명 × 150만원']);
+    rows.push(['국민연금 보험료', '− ' + C.manwon(a.nationalPension), '총급여 × 4.75% 가정']);
+    if (a.option === 'A') rows.push(['건강·고용보험료', '− ' + C.manwon(a.health), '총급여 × 4.9673% 가정']);
+    rows.push(['신용카드 등 소득공제', '− ' + C.manwon(a.card.deduction), '한도 ' + C.manwon(a.card.baseLimit + a.card.addLimit)]);
+    rows.push(['과세표준', C.manwon(a.taxBase), '']);
+    rows.push(['산출세액', C.manwon(a.tax), C.pct(a.bracket.rate) + ' − 누진공제 ' + C.manwon(a.bracket.sub)]);
+    a.creditItems.forEach(function (it) { rows.push([it.label, '− ' + C.manwon(it.amount), it.key === 'standard' ? '특별공제 미적용 시' : '']); });
+    rows.push(['결정세액(소득세)', C.manwon(a.incomeTax), a.creditsLimited ? '세액공제 합계가 산출세액을 넘어 한도 적용' : '']);
+    rows.push(['지방소득세', '+ ' + C.manwon(a.localTax), '결정세액 × 10%']);
+    rows.push(['총 부담(소득+지방)', C.manwon(a.totalTax), '']);
+    $('#process-table').innerHTML = rows.map(function (r, i) {
+      const last = i === rows.length - 1;
+      return '<tr' + (last ? ' class="total"' : '') + '><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="mut" style="text-align:left;font-weight:400">' + r[2] + '</td></tr>';
+    }).join('');
+
+    const cap = $('#cap-callout');
+    if (a.creditsLimited) {
+      cap.style.display = 'flex';
+      cap.className = 'callout warn';
+      cap.innerHTML = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2 14.4 13H1.6L8 2.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8 6.2v3M8 11.1v.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span>세액공제 합계가 산출세액보다 커서 <b>' + C.manwon(a.credits - a.creditsApplied) + '</b>은 쓰이지 못했습니다. 이 경우 연금·월세 공제를 더 받아도 돌려받는 세금은 늘지 않습니다.</span>';
+    } else cap.style.display = 'none';
+  }
+
+  /* ── 공유 카드 (Canvas) ───────────────────────────── */
+  function drawCard(a) {
+    const cv = $('#share-canvas');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const BG = '#FAFAFA', SURF = '#FFFFFF', SOFT = '#F5F6F7', INK = '#0C0D0F',
+      SUB = '#5B6067', MUT = '#6B7076', LINE = '#E7E8EA', ACC = '#2F5BFF', ACC_SOFT = '#EEF2FF';
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+
+    // 카드 타일
+    ctx.fillStyle = SURF;
+    roundRect(ctx, 60, 60, W - 120, H - 120, 34); ctx.fill();
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2;
+    roundRect(ctx, 61, 61, W - 122, H - 122, 33); ctx.stroke();
+
+    const L = 120, R = W - 120;
+
+    // 브랜드
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = INK; roundRect(ctx, L, 130, 44, 44, 13); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = '800 21px PlexKR';
+    ctx.fillText('13', L + 22, 153);
+    ctx.textAlign = 'left'; ctx.fillStyle = INK; ctx.font = '700 25px PlexKR';
+    ctx.fillText('13월의 월급 역산기', L + 60, 153);
+    ctx.textAlign = 'right'; ctx.fillStyle = MUT; ctx.font = '500 19px PlexKR';
+    ctx.fillText('2026년 귀속 연말정산', R, 153);
+    ctx.textAlign = 'left';
+
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(L, 200); ctx.lineTo(R, 200); ctx.stroke();
+
+    // 라벨 · 큰 숫자
+    ctx.fillStyle = ACC; ctx.font = '600 18px PlexKR';
+    ctx.fillText('12/31까지 챙길 수 있는 세금', L, 254);
+
+    const heroText = a.hero > 0 ? C.manwon(a.hero) : '0원';
+    let size = 88;
+    ctx.font = '800 ' + size + 'px PlexKR';
+    while (ctx.measureText(heroText).width > 840 && size > 50) {
+      size -= 4; ctx.font = '800 ' + size + 'px PlexKR';
+    }
+    ctx.fillStyle = INK;
+    ctx.fillText(heroText, L - 4, 328);
+    ctx.fillStyle = MUT; ctx.font = '400 21px PlexKR';
+    ctx.fillText(a.hero > 0 ? '지방소득세 포함 · 연금 추가 납입 + 월세 공제' : '지금은 더 챙길 공제가 없습니다', L, 396);
+
+    // 지표 타일 3개
+    const rows = [
+      ['연금저축·IRP 추가 납입', a.pension.remaining > 0 ? '+' + C.manwon(a.pensionGain) : '한도 완료'],
+      ['월세 세액공제', a.rent.eligible ? '+' + C.manwon(a.rentGain) : '해당 없음'],
+      ['카드', a.card.raw > 0
+        ? (a.card.room > 0 && (a.compare.gainCredit > 0 || a.compare.gainDebit > 0) ? '여유 ' + C.manLabel(a.card.room) : '한도 완료')
+        : '문턱 ' + C.manLabel(Math.max(0, a.card.threshold - a.card.total)) + ' 남음']
+    ];
+    rows.forEach(function (r, i) {
+      const y = 442 + i * 116;
+      ctx.fillStyle = SOFT; roundRect(ctx, L, y, R - L, 100, 18); ctx.fill();
+      ctx.strokeStyle = LINE; ctx.lineWidth = 2; roundRect(ctx, L, y, R - L, 100, 18); ctx.stroke();
+      ctx.fillStyle = SUB; ctx.font = '600 20px PlexKR'; ctx.textBaseline = 'middle';
+      ctx.fillText(r[0], L + 26, y + 50);
+      ctx.textAlign = 'right'; ctx.fillStyle = INK; ctx.font = '800 26px PlexKR';
+      ctx.fillText(r[1], R - 26, y + 51);
+      ctx.textAlign = 'left';
+    });
+
+    // 경고 타일
+    const wy = 796;
+    ctx.fillStyle = INK; roundRect(ctx, L, wy, R - L, 118, 20); ctx.fill();
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#fff'; ctx.font = '700 23px PlexKR';
+    ctx.fillText('카드는 더 쓰는 게 절세가 아닙니다', L + 28, wy + 48);
+    ctx.fillStyle = '#B9BEC6'; ctx.font = '400 19px PlexKR';
+    const maxGain = Math.max(a.compare.gainCredit, a.compare.gainDebit);
+    ctx.fillText(maxGain > 0
+      ? '100만원 더 쓰면 세금 ' + C.manwon(maxGain) + ' 감소 · 통장에서 100만원 지출'
+      : '카드 한도가 이미 찼다면 더 써도 0원입니다', L + 28, wy + 84);
+
+    // D-day
+    const d = a.dday;
+    ctx.fillStyle = ACC_SOFT; roundRect(ctx, L, 946, R - L, 60, 16); ctx.fill();
+    ctx.fillStyle = INK; ctx.font = '600 22px PlexKR'; ctx.textBaseline = 'middle';
+    ctx.fillText('미리보기  ' + d.previewLabel, L + 22, 977);
+    ctx.textAlign = 'right'; ctx.fillText('납입·결제  ' + d.payLabel, R - 22, 977);
+    ctx.textAlign = 'left';
+
+    ctx.fillStyle = MUT; ctx.font = '400 19px PlexKR';
+    ctx.fillText('총급여 ' + salaryBand(a.input.gross) + ' · 모의 역산', L, 1046);
+
+    // 푸터
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(L, 1088); ctx.lineTo(R, 1088); ctx.stroke();
+    ctx.fillStyle = INK; ctx.font = '700 20px PlexKR'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('원탭 도구 허브', L, 1128);
+    ctx.fillStyle = MUT; ctx.font = '400 18px PlexKR';
+    ctx.fillText('로그인 없이 무료 · 서버 전송 0건', L, 1160);
+    ctx.textAlign = 'right';
+    ctx.fillText('yearend-tax-reverse', R, 1128);
+    ctx.fillText(d.today.y + '-' + String(d.today.m).padStart(2, '0') + '-' + String(d.today.d).padStart(2, '0'), R, 1160);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = MUT; ctx.font = '400 17px PlexKR';
+    ctx.fillText('확정 금액은 홈택스·회사 연말정산에서 확인하세요.', L, 1204);
+  }
+
+  function solidText(ctx, text, x, y, gap) {
+    let cx = x;
+    for (let i = 0; i < text.length; i++) {
+      ctx.fillText(text[i], cx, y);
+      cx += ctx.measureText(text[i]).width + gap;
+    }
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function salaryBand(v) {
+    const g = C.n(v);
+    if (g <= 0) return '미입력';
+    if (g < 10000000) return '1,000만원 미만';
+    const lo = Math.floor(g / 10000000) * 10000000;
+    return C.manLabel(lo) + '대';
+  }
+
+  /* ── 렌더 ─────────────────────────────────────────── */
+  function render() {
+    const input = readInputs();
+    const a = C.analyze(input, new Date());
+    state.input = input; state.a = a;
+    setDday();
+    renderSummary(a);
+    renderActions(a);
+    renderCard(a);
+    renderPension(a);
+    renderRent(a);
+    renderProcess(a.base);
+    drawCard(a);
+  }
+
+  let timer = null;
+  function scheduleRender() {
+    clearTimeout(timer);
+    timer = setTimeout(render, 110);
+  }
+
+  /* 입력 포맷 */
+  function formatField(el) {
+    const raw = el.value.replace(/[^0-9]/g, '');
+    if (!raw) { el.value = ''; return; }
+    el.value = raw.replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function init() {
+    $$('#calc-form input[type=text]').forEach(function (el) {
+      el.addEventListener('input', scheduleRender);
+      el.addEventListener('input', function () { if (el.value.length > 12) formatField(el); });
+      el.addEventListener('blur', function () { formatField(el); scheduleRender(); });
+      el.addEventListener('focus', function () { el.select(); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+    });
+    $$('#seg-children button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        $$('#seg-children button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        render();
+      });
+    });
+    $('#calc-form').addEventListener('submit', function (e) { e.preventDefault(); });
+
+    $('#btn-sample').addEventListener('click', function () {
+      $('#in-gross').value = SAMPLE.gross;
+      $('#in-credit').value = SAMPLE.credit;
+      $('#in-debit').value = SAMPLE.debit;
+      $('#in-transit').value = SAMPLE.transit;
+      $('#in-market').value = SAMPLE.market;
+      $('#in-pension').value = SAMPLE.pension;
+      $('#in-irp').value = SAMPLE.irp;
+      $('#in-rent').value = SAMPLE.rent;
+      $$('#seg-children button')[0].click();
+      render();
+      toast('예시 값을 넣었습니다. 내 숫자로 바꿔보세요.');
+    });
+
+    $('#btn-reset').addEventListener('click', function () {
+      $$('#calc-form input[type=text]').forEach(function (el) { el.value = ''; });
+      $$('#seg-children button').forEach(function (x, i) { x.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
+      render();
+      toast('입력값을 지웠습니다.');
+    });
+
+    $('#btn-card').addEventListener('click', function () {
+      if (!state.a || !state.a.hasInput) { toast('총급여를 먼저 넣어주세요.'); return; }
+      const cv = $('#share-canvas');
+      cv.toBlob(function (blob) {
+        if (!blob) { toast('이미지를 만들지 못했습니다.'); return; }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = '13월의월급-역산-2026.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        toast('결과 카드를 저장했습니다.');
+      }, 'image/png');
+    });
+
+    $('#btn-copy-embed').addEventListener('click', function () {
+      const code = $('#embed-code').textContent;
+      copyText(code).then(function () { toast('퍼가기 코드를 복사했습니다.'); })
+        .catch(function () { toast('복사가 막혔습니다. 코드를 직접 선택해 주세요.'); });
+    });
+
+    $('#btn-copy-summary').addEventListener('click', function () {
+      const a = state.a;
+      if (!a || !a.hasInput) { toast('총급여를 먼저 넣어주세요.'); return; }
+      const txt = '[2026년 귀속 연말정산]\n' +
+        '12/31까지 챙길 수 있는 세금: ' + C.manwon(a.hero) + '\n' +
+        '· 연금저축·IRP: ' + (a.pension.remaining > 0 ? C.manwon(a.pensionGain) + ' (남은 한도 ' + C.manwon(a.pension.remaining) + ')' : '한도 완료') + '\n' +
+        '· 월세 세액공제: ' + (a.rent.eligible ? C.manwon(a.rentGain) : '해당 없음') + '\n' +
+        '· 카드: 100만원 더 쓰면 ' + C.manwon(Math.max(a.compare.gainCredit, a.compare.gainDebit)) + '\n' +
+        '직접 계산: https://marcj81.github.io/yearend-tax-reverse/';
+      copyText(txt).then(function () { toast('요약 문구를 복사했습니다.'); })
+        .catch(function () { toast('복사가 막혔습니다.'); });
+    });
+
+    render();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { if (state.a) drawCard(state.a); });
+    }
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy') ? resolve() : reject(); } catch (e) { reject(e); }
+      ta.remove();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+</body>
+</html>

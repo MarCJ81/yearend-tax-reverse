@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marcj81.github.io/yearend-tax-reverse/sitemap.xml
