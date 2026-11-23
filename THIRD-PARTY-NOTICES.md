@@ -4,7 +4,7 @@
 
 | 구성 요소 | 버전 | 라이선스 | 쓰는 곳 | 원본 |
 | --- | --- | --- | --- | --- |
-| decimal.js | 10.6.0 | MIT | `assets/vendor/decimal.min.js` — 세율·한도·원단위 절사 계산 | https://github.com/MikeMcl/decimal.js |
+| decimal.js | 10.6.0 | MIT | `assets/vendor/decimal.js` — 세율·한도·원단위 절사 계산 | https://github.com/MikeMcl/decimal.js |
 
 ## MIT License (decimal.js)
 
