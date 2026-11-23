@@ -633,16 +633,52 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="assets/vendor/decimal.min.js"></script>
 <script>
 /* ==CORE-START== */
 /* 2026년 귀속 연말정산 역산 코어
    - 소득세법 §47·§55·§59·§59의2·§59의3 / 조세특례제한법 §126의2·§95의2
-   - 브라우저와 node(test.js)에서 같은 코드를 쓴다. 외부 의존성 없음. */
+   - 브라우저와 node(test.js)에서 같은 코드를 쓴다.
+   - 금액 연산은 decimal.js(MIT, assets/vendor/decimal.min.js)로만 한다. */
 const TAX_CORE = (function () {
   'use strict';
 
   const YEAR = 2026;
   const MAN = 10000;
+
+  /* ── decimal.js 고정밀 연산 (MikeMcl/decimal.js, MIT) ──────────────
+     부동소수점 오차(0.1 + 0.2)와 세율·한도 곱셈의 원단위 드리프트를 없앤다.
+     엔진이 없으면 조용히 틀린 숫자를 내지 않도록 즉시 실패한다. */
+  const DEC = (function () {
+    if (typeof Decimal !== 'function') {
+      throw new Error('decimal.js 엔진을 불러오지 못했습니다 (assets/vendor/decimal.min.js)');
+    }
+    Decimal.set({ precision: 40, rounding: Decimal.ROUND_HALF_UP, toExpNeg: -40, toExpPos: 40 });
+    function of(v) {
+      if (v instanceof Decimal) return v;
+      if (v === null || v === undefined || v === '') return new Decimal(0);
+      if (typeof v === 'number') return new Decimal(isFinite(v) ? v : 0);
+      const s = String(v).replace(/,/g, '').trim();
+      try { return new Decimal(s); } catch (e) { return new Decimal(0); }
+    }
+    return {
+      of: of,
+      engine: 'decimal.js v10.6.0',
+      isDecimal: typeof Decimal.isDecimal === 'function' && Decimal.isDecimal(new Decimal(1)),
+      plus: function (a, b) { return of(a).plus(of(b)); },
+      minus: function (a, b) { return of(a).minus(of(b)); },
+      times: function (a, b) { return of(a).times(of(b)); },
+      div: function (a, b) { return of(a).div(of(b)); },
+      /* 원 단위 반올림(원 미만 사사오입) */
+      roundWon: function (v) { return of(v).toDecimalPlaces(0, Decimal.ROUND_HALF_UP).toNumber(); },
+      /* 원 단위 절사(국세 계산 관행) */
+      floorWon: function (v) { return of(v).toDecimalPlaces(0, Decimal.ROUND_FLOOR).toNumber(); },
+      /* 10원 단위 절사 */
+      floor10: function (v) { return of(v).div(10).toDecimalPlaces(0, Decimal.ROUND_FLOOR).times(10).toNumber(); },
+      /* 소수 자리 반올림 */
+      roundDp: function (v, dp) { return of(v).toDecimalPlaces(dp || 0, Decimal.ROUND_HALF_UP); }
+    };
+  })();
 
   const P = {
     year: YEAR,
@@ -698,18 +734,18 @@ const TAX_CORE = (function () {
   }
 
   function clampInt(v, lo, hi) {
-    const x = Math.round(n(v));
+    const x = DEC.roundWon(n(v));
     return Math.min(hi, Math.max(lo, x));
   }
 
   function money(v) {
-    const x = Math.round(Math.abs(n(v)));
+    const x = DEC.roundWon(Math.abs(n(v)));
     return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   /** 684000 → '68만 4,000원' */
   function manwon(v) {
-    const x = Math.round(n(v));
+    const x = DEC.roundWon(n(v));
     if (x === 0) return '0원';
     const man = Math.floor(x / MAN);
     const rest = x % MAN;
@@ -720,25 +756,25 @@ const TAX_CORE = (function () {
 
   /** 1,250만원 형태(만원 미만 절사 아님, 원 단위 그대로) */
   function manLabel(v) {
-    const x = Math.round(n(v));
+    const x = DEC.roundWon(n(v));
     if (x % MAN === 0) return money(x / MAN) + '만원';
     return manwon(x);
   }
 
   function pct(r) {
-    return (Math.round(r * 1000) / 10).toFixed(1).replace(/\.0$/, '') + '%';
+    return DEC.roundDp(DEC.times(r, 1000), 0).div(10).toFixed(1).replace(/\.0$/, '') + '%';
   }
 
   /* ── 근로소득공제 (소득세법 §47) ───────────────────── */
   function earnedDeduction(gross) {
-    const g = n(gross);
+    const g = DEC.of(n(gross));
     let d;
-    if (g <= 5000000) d = g * 0.70;
-    else if (g <= 15000000) d = 3500000 + (g - 5000000) * 0.40;
-    else if (g <= 45000000) d = 7500000 + (g - 15000000) * 0.15;
-    else if (g <= 100000000) d = 12000000 + (g - 45000000) * 0.05;
-    else d = 14750000 + (g - 100000000) * 0.02;
-    return Math.min(20000000, Math.round(d));
+    if (g.lte(5000000)) d = g.times('0.70');
+    else if (g.lte(15000000)) d = g.minus(5000000).times('0.40').plus(3500000);
+    else if (g.lte(45000000)) d = g.minus(15000000).times('0.15').plus(7500000);
+    else if (g.lte(100000000)) d = g.minus(45000000).times('0.05').plus(12000000);
+    else d = g.minus(100000000).times('0.02').plus(14750000);
+    return Math.min(20000000, DEC.roundWon(d));
   }
 
   /* ── 종합소득세 (소득세법 §55) ─────────────────────── */
@@ -754,23 +790,23 @@ const TAX_CORE = (function () {
   }
 
   function progressive(base) {
-    const b = Math.max(0, Math.round(n(base)));
+    const b = Math.max(0, DEC.roundWon(n(base)));
     const br = bracketOf(b);
-    return Math.max(0, Math.floor(b * br.rate) - br.sub);
+    return Math.max(0, DEC.floorWon(DEC.times(b, br.rate)) - br.sub);
   }
 
   /* ── 근로소득세액공제 (소득세법 §59) ───────────────── */
   function earnedCreditRaw(tax) {
-    const t = Math.max(0, n(tax));
-    return t <= 1300000 ? t * 0.55 : 715000 + (t - 1300000) * 0.30;
+    const t = DEC.of(Math.max(0, n(tax)));
+    return t.lte(1300000) ? t.times('0.55') : t.minus(1300000).times('0.30').plus(715000);
   }
 
   function earnedCreditLimit(gross) {
-    const g = Math.max(0, n(gross));
-    if (g <= 33000000) return 740000;
-    if (g <= 70000000) return Math.max(660000, 740000 - (g - 33000000) * 0.008);
-    if (g <= 120000000) return Math.max(500000, 660000 - (g - 70000000) * 0.5);
-    return Math.max(200000, 500000 - (g - 120000000) * 0.5);
+    const g = DEC.of(Math.max(0, n(gross)));
+    if (g.lte(33000000)) return 740000;
+    if (g.lte(70000000)) return Math.max(660000, DEC.roundWon(DEC.of(740000).minus(g.minus(33000000).times('0.008'))));
+    if (g.lte(120000000)) return Math.max(500000, DEC.roundWon(DEC.of(660000).minus(g.minus(70000000).times('0.5'))));
+    return Math.max(200000, DEC.roundWon(DEC.of(500000).minus(g.minus(120000000).times('0.5'))));
   }
 
   /* ── 자녀세액공제 (소득세법 §59의2) ────────────────── */
@@ -795,7 +831,7 @@ const TAX_CORE = (function () {
     const culture = low ? n(opt.culture) : 0;    // 문화체육 30%는 7천만원 이하만
     const debitPool = debit + culture;
 
-    const threshold = gross * P.card.thresholdRate;
+    const threshold = DEC.times(gross, P.card.thresholdRate).toNumber();
     const total = credit + debit + market + transit + culture;
 
     // 문턱(최저사용금액) 차감: 신용 → 체크·현금·문화 → 전통시장 → 대중교통
@@ -805,10 +841,11 @@ const TAX_CORE = (function () {
     const useM = Math.min(market, rem); rem -= useM;
     const useT = Math.min(transit, rem); rem -= useT;
 
-    const amtC = Math.round((credit - useC) * P.card.rate.credit);
-    const amtD = Math.round((debitPool - useD) * P.card.rate.debit);
-    const amtM = Math.round((market - useM) * P.card.rate.market);
-    const amtT = Math.round((transit - useT) * P.card.rate.transit);
+    const amtC = DEC.roundWon(DEC.times(credit - useC, P.card.rate.credit));
+    const amtD = DEC.roundWon(DEC.times(debitPool - useD, P.card.rate.debit));
+    const amtM = DEC.roundWon(DEC.times(market - useM, P.card.rate.market));
+    const amtT = DEC.roundWon(DEC.times(transit - useT, P.card.rate.transit));
+    const amtCulture = low ? DEC.roundWon(DEC.times(culture, P.card.rate.culture)) : 0;
     const raw = amtC + amtD + amtM + amtT;
 
     const childBonus = low
@@ -819,13 +856,13 @@ const TAX_CORE = (function () {
 
     const baseApplied = Math.min(raw, baseLimit);
     const excess = Math.max(0, raw - baseApplied);
-    const addPool = amtM + amtT + (low ? Math.round(culture * P.card.rate.culture) : 0);
+    const addPool = amtM + amtT + amtCulture;
     const addApplied = Math.min(excess, addPool, addLimit);
 
     return {
       gross, children, low, threshold, total,
       used: { credit: useC, debit: useD, market: useM, transit: useT },
-      amount: { credit: amtC, debit: amtD, market: amtM, transit: amtT, culture: low ? Math.round(culture * P.card.rate.culture) : 0 },
+      amount: { credit: amtC, debit: amtD, market: amtM, transit: amtT, culture: amtCulture },
       raw, deduction: baseApplied + addApplied,
       baseLimit, childBonus, baseApplied, remainingBase: Math.max(0, baseLimit - baseApplied),
       addLimit, addPool, addApplied, excess,
@@ -853,8 +890,8 @@ const TAX_CORE = (function () {
       irpRoom: Math.max(0, P.pension.total - savingsUsed - irpUsed),
       savingsWaste: Math.max(0, sv - P.pension.savingsCap),
       limit: P.pension.total, savingsCap: P.pension.savingsCap,
-      rate, credit: Math.round(used * rate),
-      nominalGain: Math.round(used * rate * (1 + P.localRate))
+      rate, credit: DEC.roundWon(DEC.times(used, rate)),
+      nominalGain: DEC.roundWon(DEC.times(DEC.times(used, rate), DEC.plus(1, P.localRate)))
     };
   }
 
@@ -867,10 +904,10 @@ const TAX_CORE = (function () {
     let rate = 0;
     if (g <= P.rent.splitGross) rate = P.rent.rate.low;
     else if (g <= P.rent.maxGross) rate = P.rent.rate.high;
-    const credit = Math.round(base * rate);
+    const credit = DEC.roundWon(DEC.times(base, rate));
     return {
       monthly: m, annual, base, rate, credit,
-      total: Math.round(credit * (1 + P.localRate)),
+      total: DEC.roundWon(DEC.times(credit, DEC.plus(1, P.localRate))),
       eligible: m > 0 && rate > 0,
       capped: annual > P.rent.limit
     };
@@ -887,8 +924,8 @@ const TAX_CORE = (function () {
     const earned = earnedDeduction(gross);
     const earnedIncome = Math.max(0, gross - earned);
     const personal = P.personal * dependents;
-    const np = Math.round(gross * P.nationalPensionRate);
-    const health = Math.round(gross * P.healthInsuranceRate);
+    const np = DEC.roundWon(DEC.times(gross, P.nationalPensionRate));
+    const health = DEC.roundWon(DEC.times(gross, P.healthInsuranceRate));
     const card = cardDeduction({
       gross, children,
       credit: o.credit, debit: o.debit, market: o.market, transit: o.transit, culture: o.culture
@@ -901,7 +938,7 @@ const TAX_CORE = (function () {
       const ded = personal + np + card.deduction + (useHealth ? health : 0);
       const taxBase = Math.max(0, earnedIncome - ded);
       const tax = progressive(taxBase);
-      const earnCredit = Math.min(earnedCreditLimit(gross), Math.round(earnedCreditRaw(tax)));
+      const earnCredit = Math.min(earnedCreditLimit(gross), DEC.roundWon(earnedCreditRaw(tax)));
       const items = [
         { key: 'earned', label: '근로소득세액공제', amount: earnCredit },
         { key: 'child', label: '자녀세액공제', amount: child },
@@ -912,7 +949,7 @@ const TAX_CORE = (function () {
       const credits = items.reduce(function (s, x) { return s + x.amount; }, 0);
       const applied = Math.min(credits, tax);
       const incomeTax = Math.max(0, tax - applied);
-      const local = Math.round(incomeTax * P.localRate);
+      const local = DEC.roundWon(DEC.times(incomeTax, P.localRate));
       return {
         useHealth: !!useHealth, useStandard: !!useStandard, useRent: !!useRent,
         deduction: ded, taxBase, tax, items: items, credits: credits, creditsApplied: applied,
@@ -988,8 +1025,8 @@ const TAX_CORE = (function () {
     const top = topUp(input);
     const topped = top.remaining > 0 ? calc(top.input) : base;
     const pensionGain = Math.max(0, base.totalTax - topped.totalTax);
-    const pensionNominal = Math.round(top.remaining * base.pension.rate * (1 + P.localRate));
-    const rentGain = base.rent.eligible ? Math.round(base.rent.credit * (1 + P.localRate)) : 0;
+    const pensionNominal = DEC.roundWon(DEC.times(DEC.times(top.remaining, base.pension.rate), DEC.plus(1, P.localRate)));
+    const rentGain = base.rent.eligible ? DEC.roundWon(DEC.times(base.rent.credit, DEC.plus(1, P.localRate))) : 0;
     const hero = pensionGain + rentGain;
 
     const step = 100 * MAN;   // 100만원
@@ -1014,6 +1051,7 @@ const TAX_CORE = (function () {
   return {
     YEAR: YEAR, MAN: MAN, P: P,
     n: n, money: money, manwon: manwon, manLabel: manLabel, pct: pct,
+    dec: DEC,
     earnedDeduction: earnedDeduction, progressive: progressive, bracketOf: bracketOf,
     earnedCreditRaw: earnedCreditRaw, earnedCreditLimit: earnedCreditLimit, childCredit: childCredit,
     cardDeduction: cardDeduction, pension: pension, rent: rent,
