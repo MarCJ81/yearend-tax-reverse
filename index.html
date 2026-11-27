@@ -40,6 +40,7 @@
 {"@type":"Question","name":"입력한 값이 저장되거나 전송되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 계산은 브라우저 안에서만 이뤄지고, 입력값을 서버로 보내거나 브라우저 저장소에 남기지 않습니다. 새로고침하면 모두 사라집니다."}}
 ]}
 </script>
+<style id="i18n-layout-fix">@media (max-width:560px){html[lang="en"] .nav{display:none}html[lang="en"] .topbar-in{flex-wrap:wrap;row-gap:6px}html[lang="en"] .top-badges{flex-wrap:wrap;row-gap:6px;justify-content:flex-end}html[lang="en"] .brand-text strong{font-size:14px}}</style>
 </head>
 <body>
 <noscript><div style="max-width:720px;margin:40px auto;padding:24px;border:1px solid #E7E8EA;background:#FFFFFF;border-radius:16px;font-family:sans-serif;line-height:1.7;color:#0C0D0F">이 계산기는 브라우저에서 자바스크립트로 동작합니다. 자바스크립트를 켜면 총급여·카드·연금·월세를 넣어 12월 31일 전 남은 절세 금액을 바로 계산할 수 있습니다.</div></noscript>
@@ -1693,5 +1694,6 @@ const TAX_CORE = (function () {
   else init();
 })();
 </script>
+<script src="i18n.js"></script>
 </body>
 </html>
